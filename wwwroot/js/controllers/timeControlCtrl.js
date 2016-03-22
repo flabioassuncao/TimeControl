@@ -1,4 +1,4 @@
-angular.module("timeControl").controller("timeControlCtrl", function ($scope, activityAPI, operadorasAPI, serialGenerator, addHour, $timeout) {
+angular.module("timeControl").controller("timeControlCtrl", function ($scope, activityAPI, serialGenerator, addHour, $timeout) {
 	$scope.app = "Time Control";
 	$scope.activities = [];
     $scope.timeTotal;
