@@ -1,8 +1,8 @@
 using System;
+using Infra.Data.Context;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Migrations;
-using TimeControl.Models;
 
 namespace TimeControl.Migrations
 {

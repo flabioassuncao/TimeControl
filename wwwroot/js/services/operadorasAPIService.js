@@ -1,4 +1,4 @@
-angular.module("listaTelefonica").service("operadorasAPI", function ($http, config) {
+angular.module("timeControl").service("operadorasAPI", function ($http, config) {
 	this.getOperadoras = function () {
 		return $http.get(config.baseUrl + "/Responsible");
 	};

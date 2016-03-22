@@ -1,18 +1,17 @@
+using Infra.Map;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
+using TimeControl.Models;
 
-namespace TimeControl.Models
+namespace Infra.Data.Context
 {
    public class DataBaseContext : IdentityDbContext<ApplicationUser> 
    {
        public DbSet<Activity> Activities { get; set; }
        
-       public DbSet<Responsible> Responsibles { get; set; }
-       
        protected override void OnModelCreating(ModelBuilder builder)
         { 
-            builder.Entity<Activity>().HasKey(m => m.activityId);
-            builder.Entity<Responsible>().HasKey(r => r.responsibleId);
+            new ActivityMap(builder.Entity<Activity>());
              
             base.OnModelCreating(builder); 
         } 

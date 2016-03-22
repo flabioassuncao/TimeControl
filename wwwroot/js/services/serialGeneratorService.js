@@ -1,4 +1,4 @@
-angular.module("listaTelefonica").provider("serialGenerator", function (config) {
+angular.module("timeControl").provider("serialGenerator", function (config) {
 	//console.log(config);
 	var _length = 10;
 	
@@ -25,13 +25,3 @@ angular.module("listaTelefonica").provider("serialGenerator", function (config) 
 		};
 	};
 });
-
-// function guid() {
-//   function s4() {
-//     return Math.floor((1 + Math.random()) * 0x10000)
-//       .toString(16)
-//       .substring(1);
-//   }
-//   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-//     s4() + '-' + s4() + s4() + s4();
-// }

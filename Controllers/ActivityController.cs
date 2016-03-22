@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.Mvc;
+using TimeControl.Interfaces.Repository;
 using TimeControl.Models;
-using TimeControl.Repository;
 
 namespace TimeControl.Controllers
 {

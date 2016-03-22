@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.Mvc;
 
-namespace TimeControl.Repository
+namespace TimeControl.Interfaces.Repository
 {
     public interface IActivityRepository
    {
@@ -12,5 +12,6 @@ namespace TimeControl.Repository
       Activity Find(Guid Id);
       void Remove(Guid Id);
       void Update(Guid id, [FromBody] Activity activity);
+      
    }
 }

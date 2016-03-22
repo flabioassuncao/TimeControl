@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Infra.Data.Context;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
+using TimeControl.Interfaces.Repository;
 using TimeControl.Models;
 
 namespace TimeControl.Repository
@@ -51,5 +53,7 @@ namespace TimeControl.Repository
              _context.Activities.Update(activity);
             _context.SaveChanges();
         }
+
+        
     }
 }
