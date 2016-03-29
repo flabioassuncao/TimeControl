@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using TimeControl.Interfaces.Repository;
 using TimeControl.Models;
 
 namespace TimeControl.Controllers
 {
+    
     [Route("api/[controller]")]
     public class ActivityController : Controller
     {

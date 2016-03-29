@@ -1,3 +1,4 @@
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
@@ -8,6 +9,7 @@ using TimeControl.Models;
 
 namespace TimeControl.Controllers
 {
+    // [Route("api/[controller]")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _securityManager;
@@ -34,26 +36,48 @@ namespace TimeControl.Controllers
   
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         [Route("Account/Register")]
-        public async Task<IActionResult> Register(Register model)
-        {
+        public async Task<IActionResult> Register([FromBodyAttribute]Register model)
+        {   
+            // if (ModelState.IsValid)
+            // {
+            //     var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                
+            //     var result = await _securityManager.CreateAsync(user, model.Password);
+                
+            //     if (result.Succeeded)
+            //     {
+            //         await _loginManager.SignInAsync(user, isPersistent: false);
+                    
+            //         return RedirectToAction(nameof(InitialController.timer), "Initial");
+            //     }
+            // }
+             
+            // return View(model);
+            
+            
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                try
                 {
-                    UserName = model.Email,
-                    Email = model.Email
-                };
-                var result = await _securityManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                    if(model.Password == model.ConfirmPassword){
+                        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                        var result = await _securityManager.CreateAsync(user, model.Password);
+                        if (!result.Succeeded)
+                            throw new Exception("Não foi possível efetuar o registro. Verifique se as informações fornecidas estão corretas.");          
+                    }else
+                        throw new Exception("Senhas diferentes.");
+                    
+                    return Ok();                    
+                }
+                catch (System.Exception e)
                 {
-                    await _loginManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction(nameof(InitialController.timer), "Initial");
+                    ModelState.AddModelError("Error", e.Message);                   
                 }
             }
-             
-            return View(model);
+            
+            return HttpBadRequest(ModelState);
         }
  
         //5
@@ -69,22 +93,28 @@ namespace TimeControl.Controllers
         //6
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         [Route("Account/Login")]
-        public async Task<IActionResult> Login(Login model, string returnUrl = null)
+        public async Task<IActionResult> Login([FromBodyAttribute]Login model, [FromQueryAttribute]string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var result = await _loginManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
-                if (result.Succeeded)
+                try
                 {
-                    return RedirectToAction(nameof(InitialController.timer), "Initial");
+                    var result = await _loginManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
+                    if (!result.Succeeded)
+                        throw new Exception("Não foi possível efetuar o Login. Verifique se as informações fornecidas estão corretas.");          
+                    
+                    return new HttpOkObjectResult(returnUrl);                    
+                }
+                catch (System.Exception e)
+                {
+                    ModelState.AddModelError("Error", e.Message);                   
                 }
             }
- 
-              
-            return View(model);
+            
+            return HttpBadRequest(ModelState);
         }
  
         //7

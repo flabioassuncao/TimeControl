@@ -1,8 +1,24 @@
 {
-	"name": "ASP.NET",
-	"private": true,
+  "name": "TimeControl",
+  "private": true,
   "dependencies": {
     "jQuery": "2.1.4",
-    "bootstrap": "3.3.6"
-  }
+    "bootstrap": "3.3.6",
+    "moment": "^2.12.0"
+  },
+  "authors": [
+    "Flabio Filho <flabiofilho@gsd.com.br>"
+  ],
+  "description": "App to TimeControl with bower",
+  "main": "assets/scripts/main.js",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }

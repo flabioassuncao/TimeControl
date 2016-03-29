@@ -72,13 +72,9 @@ namespace TimeControl
                options.AppId = "1121775784524038";
                options.AppSecret = "00a6b481bca61798983d89239eaf9f08"; 
             });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Initial}/{action=timer}/{id?}");
-            });
+            
+            
+            app.UseMvc();
         }
 
         // Entry point for the application.

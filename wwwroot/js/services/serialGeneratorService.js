@@ -1,5 +1,5 @@
 angular.module("timeControl").provider("serialGenerator", function (config) {
-	//console.log(config);
+	
 	var _length = 10;
 	
 	this.getLength = function () {

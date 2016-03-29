@@ -1,8 +1,20 @@
-angular.module("timeControl").controller("timeControlCtrl", function ($scope, activityAPI, serialGenerator, addHour, $timeout) {
+angular.module("timeControl").controller("timeControlCtrl", function ($scope, activityAPI, serialGenerator, addHour, $timeout, $location, $q, localStorageService) {
 	$scope.app = "Time Control";
 	$scope.activities = [];
     $scope.timeTotal;
     $scope.counter = 0;
+    $scope.message = "";
+    $scope.alert = true;
+    // $scope.registration = {
+    //     userName: "",
+    //     password: "",
+    //     confirmPassword: ""
+    // };
+    // $scope.loginData = {
+        
+    //     useRefreshTokens: false
+    // };
+    
     $scope.stopped = true;
     var vm = this;
     vm.Total = 0;
@@ -30,8 +42,9 @@ angular.module("timeControl").controller("timeControlCtrl", function ($scope, ac
           tempo = tempo.replace("H ", ":");
           tempo = tempo.replace("M ", ":");
           tempo = tempo.replace("S", "");
-          activity.Time = tempo
-          activity.Responsible = document.getElementById('usuario').innerText;
+          activity.Time = tempo;
+        //   activity.Responsible = document.getElementById('usuario').innerText;
+          activity.Responsible = "Flábio";
 		  activityAPI.saveActivity(activity).success(function (data) {
 			 delete $scope.activity;
              document.getElementById('tempo').innerText  = '00H 00M 00S';
@@ -91,5 +104,31 @@ angular.module("timeControl").controller("timeControlCtrl", function ($scope, ac
         document.getElementById('startDate').value = moment().format();
     }
     
+    $scope.signUp = function (registration) {
+        
+        activityAPI.signUp(registration).success(function (response) {
+            startTimer();
+        }).error(function (data) {
+            $scope.alert = false;
+			$scope.message = "Favor verificar os campo preenchidos, e certifique a senha inserida!";
+		});;
+    };
+    
+    var startTimer = function () {
+        var timer = $timeout(function () {
+            $timeout.cancel(timer);
+            $location.path('/login');
+        }, 2000);
+    }
+    
+    $scope.login = function (loginData) {
+        activityAPI.login(loginData).success(function (response) {
+
+            $location.path('/timer');
+
+        });
+    };
+    
+    $scope.authentication = activityAPI.authentication;
 	carregarActivity();
 });

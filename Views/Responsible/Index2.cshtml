@@ -1,0 +1,155 @@
+<html ng-app="listaTelefonica">
+<head>
+	<meta charset="UTF-8">
+	<title>Lista Telefonica</title>
+	<link rel="stylesheet" type="text/css" href="~/lib/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+	<script src="~/lib/angular/angular.js"></script>
+	<script src="~/lib/angular/angular-messages.js"></script>
+	<script src="~/js/app.js"></script>
+	<script src="~/js/controllers/listaTelefonicaCtrl.js"></script>
+	<script src="~/js/services/contatosAPIService.js"></script>
+	<script src="~/js/services/operadorasAPIService.js"></script>
+	<script src="~/js/services/serialGeneratorService.js"></script>
+	<script src="~/js/config/serialGeneratorConfig.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="~/js/value/configValue.js"></script>
+</head>
+<body ng-controller="listaTelefonicaCtrl">
+
+ <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+   <div class="navbar-header">
+    <a class="navbar-brand" href="#">{{app}}</a>
+   </div>
+   
+  </div>
+ </nav>
+
+ <div id="main" class="container-fluid" style="margin-top: 50px">
+ 
+ 	<div id="top" class="row">
+		<div class="col-sm-3">
+			<h2>Itens - {{message}}</h2>
+		</div>
+		<div class="col-sm-6">
+			<div class="input-group h2">
+				<input name="data[search]" class="form-control" id="search" ng-model="criterioDeBusca" placeholder="O que você está buscando?">
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="submit">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+		<div class="col-sm-3">
+            <button type="button" class="btn btn-primary pull-right h2" data-toggle="modal" data-target="#myModal">cadastrar</button>
+		</div>
+	</div> <!-- /#top -->
+    
+    <div id="top" class="row">
+		<div class="col-sm-4">
+				<input  class="form-control"  ng-model="contato.Observation" placeholder="E que você está trabalhando?">
+		</div>
+		<div class="col-sm-1">
+			<select class="form-control" ng-model="contato.Name" ng-options="operadora.Nome for operadora in operadoras | orderBy:'Nome'">
+	               <option value="">Executor</option>
+			</select>
+		</div>
+		<div class="col-sm-1">
+            <input id="tempo" class="form-control" value="{{counter|formatTimer}}">
+		</div>
+        <div class="col-sm-1">
+            <button ng-click="takeAction()" ng-style="buttonGo" type="submit" class="btn btn-default">{{buttonText}}</button>
+		</div>
+        <div class="col-sm-1">
+            <button class="btn btn-primary" ng-click="adicionarContato(contato)" >Finish</button>
+		</div>
+	</div> <!-- /#top -->
+ 
+ 	<hr />
+ 	<div id="list" class="row">
+	
+	<div class="table-responsive col-md-12">
+		<table class="table table-striped" cellspacing="0" cellpadding="0" ng-show="contatos.length > 0">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Atividade</th>
+                    <th><a href="" ng-click="ordenarPor('Name')">Responsavel</a></th>
+                    <th>Tempo</th>
+                    <th class="actions">Ação</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+					<td>1009</td>
+					<td>{{contato.Observation}}</td>
+				    <td>{{contato.Name}}</td>
+                    <td>{{contato.Time}}</td>
+					<td class="actions">
+						<a class="btn btn-warning btn-xs" href="#">Editar</a>
+						<a class="btn btn-danger btn-xs"  href="#" data-toggle="modal" data-target="#delete-modal">Excluir</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	</div> <!-- /#list -->
+	
+	<div id="bottom" class="row">
+		<div class="col-md-12">
+			<ul class="pagination">
+				<li class="disabled"><a>&lt; Anterior</a></li>
+				<li class="disabled"><a>1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li class="next"><a href="#" rel="next">Próximo &gt;</a></li>
+			</ul><!-- /.pagination -->
+		</div>
+	</div> <!-- /#bottom -->
+ </div> <!-- /#main -->
+
+<!-- Modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalLabel">Excluir Item</h4>
+      </div>
+      <div class="modal-body">
+        Deseja realmente excluir este item?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Sim</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">N&atilde;o</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Cadastro Executor</h4>
+        </div>
+        <div class="modal-body">
+          <input class="form-control" type="text" ng-model="exe.Nome" name="nome" placeholder="Nome" ng-required="true" />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary " data-dismiss="modal" ng-click="AddExecutor(exe)">Adicionar</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+</div>
+
+</body>
+</html>
