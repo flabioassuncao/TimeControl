@@ -7,7 +7,7 @@ using TimeControl.Models;
 
 namespace TimeControl.Controllers
 {
-    
+    [Authorize]
     [Route("api/[controller]")]
     public class ActivityController : Controller
     {
@@ -24,10 +24,22 @@ namespace TimeControl.Controllers
             return _activityRepository.GetAll();
         }
         
+        
         [HttpGet("{id}", Name = "GetActivity")]
         public IActionResult GetById(Guid Id)
         {
             return new ObjectResult(_activityRepository.Find(Id));
+        }
+        
+        
+        [HttpGet("{user}", Name = "GetActivity2")]
+         public IActionResult getByUser(string user)
+        {
+            try{
+                return new ObjectResult(_activityRepository.Find(user));
+            }catch{
+                return HttpBadRequest();
+            }
         }
         
         [HttpPost]
@@ -36,10 +48,10 @@ namespace TimeControl.Controllers
             _activityRepository.Add(activity);
         }
  
-        [HttpPut("{id}")]
-        public void Update(Guid id, [FromBody]Activity activity)
+        [HttpPut]
+        public void Update([FromBody]Activity activity)
         {
-            _activityRepository.Update(id, activity);
+            _activityRepository.Update(activity);
         }
  
         [HttpDelete("{id}")]

@@ -9,9 +9,18 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
     var _getActivity = function () {
 		return $http.get(config.baseUrl + "/Activity");
 	};
-
+    
+    var _updateActivity = function (activity) {
+        // console.log(activity);
+		return $http.put(config.baseUrl + "/Activity", activity);
+	};
+    
 	var _saveActivity = function (activity) {
-		return $http.post(config.baseUrl + "/Activity", activity);
+		return $http.post(config.baseUrl + "/Activity", activity).success(function (response) {
+                localStorageService.set('idActivityData', { idActivity: activity.activityId});
+        }).error(function (err, status) {
+           
+        });
 	};
     
     var _deleteActivity = function(activity){
@@ -37,6 +46,11 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
         });
 
     };
+    
+    var _salvarId = function(resul){
+        // console.log(resul.activityId);
+        localStorageService.set('idActivityData', { idActivity: resul.activityId});
+    }
     
     var _logOut = function () {
 
@@ -64,7 +78,19 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
         if(!_authentication.isAuth)
             $location.path('/login');
     }
-
+    
+    var _recuperarIdActivity = function() {
+        
+        var idData = localStorageService.get('idActivityData');
+        // console.log(idData.idActivity);
+        return idData.idActivity;
+    }
+    
+    var _continuarActivity = function(activity)
+    {
+       localStorageService.set('continueActivity', { Link: activity.Link, Observation: activity.Observation});
+    }
+    
 	return {
 		getActivity: _getActivity,
 		saveActivity: _saveActivity,
@@ -74,6 +100,10 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
         authentication: _authentication,
         logOut: _logOut,
         fillAuthData: _fillAuthData,
-        verificar: _verificar
+        verificar: _verificar,
+        updateActivity: _updateActivity,
+        recuperarIdActivity: _recuperarIdActivity,
+        continuarActivity: _continuarActivity,
+        salvarId: _salvarId
 	};
 });

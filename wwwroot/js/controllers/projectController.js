@@ -36,6 +36,11 @@ angular.module("timeControl").controller("projectController", function ($scope, 
         return total;
     }
     
+    $scope.verActivity = function(activity){
+        // console.log(activity);
+        activityAPI.continuarActivity(activity);
+    }
+    
     var authen = function (){
         activityAPI.verificar();
     }

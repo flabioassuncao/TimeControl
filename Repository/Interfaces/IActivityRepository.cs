@@ -10,8 +10,10 @@ namespace TimeControl.Interfaces.Repository
       void Add(Activity activity);
       IEnumerable<Activity> GetAll();
       Activity Find(Guid Id);
+    //   Activity Find(string user, bool status);
+      Activity Find(string user);
       void Remove(Guid Id);
-      void Update(Guid id, [FromBody] Activity activity);
+      void Update([FromBody] Activity activity);
       
    }
 }

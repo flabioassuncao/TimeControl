@@ -8,6 +8,7 @@ namespace TimeControl.Models
        public string Observation { get; set; }
        public string Link { get; set; }
        public string Time { get; set; }
+       public bool Status { get; set; }
        public DateTime StartDate { get; set; }
        public DateTime EndDate { get; set; }
        public string Responsible { get; set; }
