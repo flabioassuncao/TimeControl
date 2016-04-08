@@ -2,7 +2,7 @@ angular.module("timeControl").controller("loginController", function ($scope, ac
 
     $scope.alert = true;
 
-$scope.login = function (loginData) {
+    $scope.login = function (loginData) {
         activityAPI.login(loginData).success(function (response) {
 
             $location.path('/timer');

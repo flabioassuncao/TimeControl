@@ -31,9 +31,11 @@ namespace TimeControl.Repository
         }
 
         public Activity Find(Guid Id)
-        {
-            // return ActivityList.Find(m => m.activityId.Equals(key));
-            return _context.Activities.AsNoTracking().First(t => t.activityId == Id);
+        {            
+            var activities = _context.Activities.AsNoTracking().First(t => t.activityId == Id);
+            var times      = _context.Times.Where(x => x.activityId == activities.activityId).ToList();
+            activities.Times = times;
+            return activities;
         }
         
         public Activity Find(string user)
@@ -46,7 +48,18 @@ namespace TimeControl.Repository
         {
             _logger.LogCritical("Getting a the existing records");
             // return _context.Activities.AsNoTracking().ToList();
-            return _context.Activities.AsNoTracking().ToList();
+            
+            
+            return _context.Activities.AsNoTracking()
+            .Select(a => new Activity()
+            {
+                activityId = a.activityId,
+                Observation = a.Observation,
+                Link = a.Link,
+                Responsible = a.Responsible,
+                Times = a.Times.Where(t => t.activityId == a.activityId).ToList()
+            })
+            .ToList<Activity>();
         }
 
         public void Remove(Guid Id)
@@ -63,16 +76,55 @@ namespace TimeControl.Repository
             {
                 itemToUpdate.Observation = activity.Observation;
                 itemToUpdate.Link = activity.Link;
-                itemToUpdate.Status = activity.Status;
-                itemToUpdate.Time = activity.Time;
-                itemToUpdate.StartDate = activity.StartDate;
-                itemToUpdate.EndDate = activity.EndDate;
                 itemToUpdate.Responsible = activity.Responsible;
                 itemToUpdate.ResponsibleId = activity.ResponsibleId;
             }
              _context.SaveChanges();
         }
 
-        
+        public void SaveTime(Time time)
+        {
+             _context.Times.Add(time);
+            _context.SaveChanges();
+        }
+
+        public void UpdateTime(Time time)
+        {
+            var itemToUpdate = _context.Times.SingleOrDefault(t => t.TimeId == time.TimeId);
+            if (itemToUpdate != null)
+            {
+                itemToUpdate.ActivityTime = time.ActivityTime;
+                itemToUpdate.StartDate = time.StartDate;
+                itemToUpdate.EndDate = time.EndDate;
+                itemToUpdate.status = time.status;
+            }
+            _context.SaveChanges();
+        }
+
+        public void DeleteTime(Guid Id)
+        {
+            var entity = _context.Times.First(t => t.TimeId == Id);
+            _context.Times.Remove(entity);
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<Activity> GetAllUser(string responsible)
+        {
+            _logger.LogCritical("Getting a the existing records");
+            // return _context.Activities.AsNoTracking().ToList();
+            
+            
+            return _context.Activities.AsNoTracking()
+            .Select(a => new Activity()
+            {
+                activityId = a.activityId,
+                Observation = a.Observation,
+                Link = a.Link,
+                Responsible = a.Responsible,
+                Times = a.Times.Where(t => t.activityId == a.activityId).ToList()
+            })
+            .Where(r => r.Responsible == responsible)
+            .ToList<Activity>();
+        }
     }
 }

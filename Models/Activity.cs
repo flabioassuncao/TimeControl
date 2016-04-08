@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TimeControl.Models
 {
@@ -7,10 +8,8 @@ namespace TimeControl.Models
        public Guid activityId { get; set; }
        public string Observation { get; set; }
        public string Link { get; set; }
-       public string Time { get; set; }
        public bool Status { get; set; }
-       public DateTime StartDate { get; set; }
-       public DateTime EndDate { get; set; }
+       public IList<Time> Times { get; set; }
        public string Responsible { get; set; }
        public Guid ResponsibleId { get; set; }
    }

@@ -7,7 +7,7 @@ angular.module("timeControl").controller("indexController", function ($scope, ac
     $scope.authentication = activityAPI.authentication;
     
     var authen = function (){
-        activityAPI.verificar();
+        activityAPI.verificarAutenticacao();
     }
     
     authen();

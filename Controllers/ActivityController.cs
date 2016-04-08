@@ -7,7 +7,7 @@ using TimeControl.Models;
 
 namespace TimeControl.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     public class ActivityController : Controller
     {
@@ -22,6 +22,13 @@ namespace TimeControl.Controllers
         public IEnumerable<Activity>GetAll()
         {            
             return _activityRepository.GetAll();
+        }
+        
+        [HttpGet]
+        [Route("GetAllUser/{user}")]
+        public IEnumerable<Activity>GetAllUser(string user)
+        {            
+            return _activityRepository.GetAllUser(user);
         }
         
         
@@ -59,5 +66,31 @@ namespace TimeControl.Controllers
         {
             _activityRepository.Remove(id);
         }
+        
+        // POST api/[controller]/SaveTime
+        [HttpPost]
+        [Route("SaveTime")]
+        public void SaveTime([FromBody] Time time)
+        {
+            _activityRepository.SaveTime(time);
+        }
+        
+        // PUT api/[controller]/UpdateTime
+        [HttpPut]
+        [Route("UpdateTime")]
+        public void UpdateTime([FromBody]Time time)
+        {
+            _activityRepository.UpdateTime(time);
+        }
+        
+        // DELETE api/[controller]/DeleteTime
+        [HttpDelete]
+        [Route("DeleteTime/{id:Guid}")]
+        public void DeleteTime(Guid id)
+        {
+            Console.WriteLine("entrou no delete");
+            _activityRepository.DeleteTime(id);
+        }
+        
     }
 }

@@ -8,10 +8,12 @@ namespace Infra.Data.Context
    public class DataBaseContext : IdentityDbContext<ApplicationUser> 
    {
        public DbSet<Activity> Activities { get; set; }
+       public DbSet<Time> Times { get; set; }
        
        protected override void OnModelCreating(ModelBuilder builder)
         { 
             new ActivityMap(builder.Entity<Activity>());
+            new TimeMap(builder.Entity<Time>());
              
             base.OnModelCreating(builder); 
         } 

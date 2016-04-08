@@ -22,7 +22,7 @@ angular.module("timeControl").config(function ($routeProvider) {
     
     $routeProvider.otherwise(
     { 
-        redirectTo: '/login' 
+        redirectTo: '/timer' 
     });
 });
 

@@ -37,8 +37,8 @@
 								      <th> Actions </th>
 								    </tr>
 								  </thead>
-								  <tbody>
-								    <tr  ng-repeat="activity in act = (activities | filter:criterioDeBusca | filter: filterByUserNameCurrentContext | filter: {Status: true} ) | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+								  <tbody ng-repeat="activity in act = (activities | filter:criterioDeBusca | filter: filterByUserNameCurrentContext  ) | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
+								    <tr ng-repeat="time in times = (activity.Times | filter:true)" >
 									    <td style="width:24%" class="add-img-td">
 									       <div>
 									    	  <strong><a href="{{activity.Link}}"> {{activity.Link}} </a></strong>
@@ -51,14 +51,14 @@
 									    </td>
 									    <td style="width:16%" class="price-td">
 										    <div>
-										    	<strong> {{activity.Time}}</strong>
+										    	<strong> {{time.ActivityTime}}</strong>
 										    </div>
 									    </td>
 									    <td style="width:10%" class="action-td">
 										    <div>
 											    <!--<p><a class="btn btn-primary btn-xs"> Editar </a></p>-->
-											    <p> <a ng-click="deletarActivity(activity.activityId)" class="btn btn-danger btn-xs icon-trash fa"> </a></p>
-                                                <p> <a ng-click="verActivity(activity)" class="btn btn-success btn-xs icon-play-circled fa" href="#/timer"> </a></p>
+											    <p> <a ng-click="DeletarTempo(time.TimeId)" class="btn btn-danger btn-xs icon-trash fa"></a></p>
+                                                <p> <a ng-click="ContinuarAtividade(activity)" class="btn btn-success btn-xs icon-play-circled fa"> </a></p>
 										    </div>
 									    </td>
 								    </tr>
@@ -67,7 +67,7 @@
                                 <div class="table-action">
 									<div class="table-search pull-right col-xs-7">
 										<div class="form-group">
-											<label class="col-xs-8 control-label text-right">Total time: {{ timeTotal() }} <br></label>
+											<label class="col-xs-8 control-label text-right">Total time: {{ TempoTotalAtividades() }} <br></label>
 										</div>
 									</div>
 								</div>

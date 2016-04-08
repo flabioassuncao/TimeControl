@@ -7,13 +7,12 @@
                                 <p class="sub animateme fittext3 animated fadeIn"> Control the time you devote to your project </p>
                                 <div ng-show="!divStart" class="row search-row animated animated lightSpeedIn">
                                     <form name="userForm">
-                                        <div class="col-lg-8 col-sm-8 search-col relative locationicon">
+                                        <div class="col-lg-4 col-sm-4 search-col relative locationicon">
                                             <i class="icon-location-2 icon-append"></i>
-                                            <input type="text" name="country" id="link" class="form-control locinput input-rel searchtag-input has-icon" placeholder="What are you working on?" ng-model="activity.Link" required>
+                                            <input type="text" name="country" id="link" class="form-control locinput input-rel searchtag-input" placeholder="What are you working on?" ng-model="activity.Link" required>
                                         </div>
                                         <div class="col-lg-4 col-sm-4 search-col">
-                                            <button ng-click="takeAction();HideStart();valueStartDate();createActivity(activity)" type="submit" class="btn btn-primary btn-search btn-block" ng-disabled="userForm.$invalid"><strong>Start</strong></button>
-                                            <!--<button ng-click="objFalse()"  class="btn btn-primary btn-search btn-block" ><strong>teste</strong></button>-->
+                                            <button ng-click="createActivity(activity);takeAction();valueStartDate();HideStart()" type="submit" class="btn btn-primary btn-search btn-block" ng-disabled="userForm.$invalid"><strong>Start</strong></button>
                                         </div>
                                     </form>
                                 </div>
@@ -26,7 +25,7 @@
                         <div class="row">
                             <div class="col-sm-12 page-content col-thin-right">
                                 <div class="inner-box category-content">
-                                    <h2  class="title-2"><a ng-bind="activity.Link" href="{{activity.Link}}" target="_blank" > </a></h2>
+                                    <h2 ng-bind="activity.Link"  class="title-2"></h2>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 ">
                                             <textarea class="form-control" rows="5" id="comment" placeholder="Description project..." ng-model="activity.Observation" required></textarea>
@@ -36,7 +35,8 @@
                                         </div>
                                         <div class="col-md-6 col-sm-6">
                                             <div class="cat-list" style="text-align:center;">
-                                                <a ng-show="tagAstart" ng-click="takeAction();updateActivity(activity)">Start / Pause</a> 
+                                                <p> <a ng-show="tagStop" ng-click="takeAction();updateActivity(activity);HideStart()" class="btn btn-danger btn-xs icon-stop fa"></a></p>
+                                                <!--<a ng-show="tagAstart" ng-click="takeAction();updateActivity(activity)">Start / Pause</a> -->
                                                 <h3 id="tempo" style="font-size: 50px;line-height: 70px; " class="cat-title">{{counter|formatTimer}}</h3>
                                                 <a ng-show="tagAfinish" ng-click="updateFinishActivity(activity);HideStart()">Finish</a>
                                             </div>
