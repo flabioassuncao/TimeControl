@@ -12,4 +12,5 @@ angular.module("timeControl").controller("loginController", function ($scope, ac
 			$scope.message = "Verifique seus dados!";
 		});
     };
+    
 });

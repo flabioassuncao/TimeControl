@@ -40,9 +40,8 @@
 								  <tbody ng-repeat="activity in act = (activities | filter:criterioDeBusca | filter: filterByUserNameCurrentContext  ) | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao">
 								    <tr ng-repeat="time in times = (activity.Times | filter:true)" >
 									    <td style="width:24%" class="add-img-td">
-									       <div>
-									    	  <strong><a href="{{activity.Link}}"> {{activity.Link}} </a></strong>
-									       </div>
+                                            <div ng-bind-html="SkipValidation((activity.Link | formatLink))">
+                                            </div>
 									    </td>
 									    <td style="width:50%" class="ads-details-td">
 										    <div>
@@ -57,8 +56,8 @@
 									    <td style="width:10%" class="action-td">
 										    <div>
 											    <!--<p><a class="btn btn-primary btn-xs"> Editar </a></p>-->
-											    <p> <a ng-click="DeletarTempo(time.TimeId)" class="btn btn-danger btn-xs icon-trash fa"></a></p>
-                                                <p> <a ng-click="ContinuarAtividade(activity)" class="btn btn-success btn-xs icon-play-circled fa"> </a></p>
+											    <p> <a ng-click="DeleteTime(time.TimeId)" class="btn btn-danger btn-xs icon-trash fa"></a></p>
+                                                <p> <a ng-click="ContinueActivity(activity)" class="btn btn-success btn-xs icon-play-circled fa"> </a></p>
 										    </div>
 									    </td>
 								    </tr>
@@ -67,7 +66,7 @@
                                 <div class="table-action">
 									<div class="table-search pull-right col-xs-7">
 										<div class="form-group">
-											<label class="col-xs-8 control-label text-right">Total time: {{ TempoTotalAtividades() }} <br></label>
+											<label class="col-xs-8 control-label text-right">Total time: {{ totalTimeActivities() }} <br></label>
 										</div>
 									</div>
 								</div>

@@ -4,25 +4,6 @@ angular.module("timeControl").controller("timerController", function ($scope, ac
     $scope.counter = 0;
     $scope.teste = false;
     
-    
-    // var continuarActivity = function() {
-    //     var idData = localStorageService.get('continueActivity');
-    //     if(idData != null){
-    //         $scope.activity = idData;
-    //         var time = {};
-    //         time.TimeId = serialGenerator.generate();
-    //         time.StartDate = moment().format();
-    //         time.ActivityId = activityAPI.recuperarIdActivity();;
-    //         activityAPI.saveTime(time).success(function (data) {
-	// 		    document.getElementById('startDate').value = moment().format();
-    //             $scope.divStart = true;
-    //             $scope.tagStop = true;
-    //             $scope.stopped = false;
-	// 	    }); 
-            
-    //     }
-    // }
-    
     $scope.timeTotal = function(){
         var total = "00:00:00";
         for(var i = 0; i < $scope.act.length; i++){
@@ -115,6 +96,7 @@ angular.module("timeControl").controller("timerController", function ($scope, ac
                 time.TimeId = serialGenerator.generate();
                 time.StartDate = document.getElementById('startDate').value;
                 time.ActivityId = activity.activityId;
+                time.ActivityTime = "00:00:00";
                 activityAPI.saveTime(time);
 		});
     }
@@ -207,7 +189,7 @@ angular.module("timeControl").controller("timerController", function ($scope, ac
             var authData = localStorageService.get('authorizationData');
             for(item in objts){
                 for(obj in objts[item].Times){
-                    if(objts[item].Times[obj].status == false && objts[item].Responsible == authData.userName){ //add user
+                    if(objts[item].Times[obj].status == false && objts[item].Responsible == authData.userName){
                         timer = objts[item].Times[obj];
                         resul = objts[item];
                     }
@@ -217,20 +199,19 @@ angular.module("timeControl").controller("timerController", function ($scope, ac
                 $scope.activity = resul;
                 var dt1 = moment(timer.StartDate, "YYYY/MM/DD hh:mm:ss");
                 var dt2 = moment(moment().format(), "YYYY/MM/DD hh:mm:ss");
-                var diferenca = dt2.diff(dt1, 'seconds');
-                var x = moment.duration(diferenca,'seconds')
+                var difference = dt2.diff(dt1, 'seconds');
+                var x = moment.duration(difference,'seconds')
                 var h = x.hours().toString().length == 2? x.hours() : ("0" + x.hours());
                 var m = x.minutes().toString().length == 2? x.minutes() : ("0" + x.minutes());
                 var s = x.seconds().toString().length == 2? x.seconds() : ("0" + x.seconds());
                 document.getElementById('tempo').innerText  = h + "H " + m + "M " + s + "S";
-                $scope.counter = diferenca;
+                $scope.counter = difference;
                 $scope.divStart = true;
                 $scope.tagStop = true;
                 $scope.stopped = false;
                 document.getElementById('startDate').value = timer.StartDate;
                 localStorageService.set('idActivityData', { idActivity: resul.activityId});
                 localStorageService.set('idTimeData', { idTime: timer.TimeId});
-                
             }
 		}).error(function (data, status) {
 		});
