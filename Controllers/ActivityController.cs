@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
-using TimeControl.Interfaces.Repository;
+using TimeControl.Application.Interface;
 using TimeControl.Models;
 
 namespace TimeControl.Controllers
@@ -11,85 +11,69 @@ namespace TimeControl.Controllers
     [Route("api/[controller]")]
     public class ActivityController : Controller
     {
-        private readonly IActivityRepository _activityRepository;
-        
-        public ActivityController(IActivityRepository activityRepository)
+        private readonly IActivityService _activityService;
+        public ActivityController(IActivityService activityService)
         {
-            _activityRepository = activityRepository;
+            _activityService = activityService;
         }
         
         [HttpGet]
         public IEnumerable<Activity>GetAll()
         {            
-            return _activityRepository.GetAll();
+            return _activityService.GetAll();
         }
         
         [HttpGet]
         [Route("GetAllUser/{user}")]
         public IEnumerable<Activity>GetAllUser(string user)
         {            
-            return _activityRepository.GetAllUser(user);
+            return _activityService.GetAllUser(user);
         }
         
         
         [HttpGet("{id}", Name = "GetActivity")]
         public IActionResult GetById(Guid Id)
         {
-            return new ObjectResult(_activityRepository.Find(Id));
-        }
-        
-        
-        [HttpGet("{user}", Name = "GetActivity2")]
-         public IActionResult getByUser(string user)
-        {
-            try{
-                return new ObjectResult(_activityRepository.Find(user));
-            }catch{
-                return HttpBadRequest();
-            }
+            return new ObjectResult(_activityService.Find(Id));
         }
         
         [HttpPost]
-        public void Create([FromBody] Activity activity)
-        {
-            _activityRepository.Add(activity);
+        public IActionResult Create([FromBody] Activity activity)
+        {   
+            return Json(_activityService.Add(activity));
         }
  
         [HttpPut]
         public void Update([FromBody]Activity activity)
         {
-            _activityRepository.Update(activity);
+            _activityService.Update(activity);
         }
  
         [HttpDelete("{id}")]
         public void Delete(Guid id)
         {
-            _activityRepository.Remove(id);
+            _activityService.Remove(id);
         }
         
-        // POST api/[controller]/SaveTime
         [HttpPost]
         [Route("SaveTime")]
-        public void SaveTime([FromBody] Time time)
+        public IActionResult SaveTime([FromBody] Time time)
         {
-            _activityRepository.SaveTime(time);
+            return Json(_activityService.SaveTime(time));
         }
         
-        // PUT api/[controller]/UpdateTime
         [HttpPut]
         [Route("UpdateTime")]
         public void UpdateTime([FromBody]Time time)
         {
-            _activityRepository.UpdateTime(time);
+            _activityService.UpdateTime(time);
         }
         
-        // DELETE api/[controller]/DeleteTime
         [HttpDelete]
         [Route("DeleteTime/{id:Guid}")]
         public void DeleteTime(Guid id)
         {
-            Console.WriteLine("entrou no delete");
-            _activityRepository.DeleteTime(id);
+            _activityService.DeleteTime(id);
         }
         
     }

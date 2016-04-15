@@ -1,4 +1,4 @@
-angular.module("timeControl").controller("registerController", function ($scope, activityAPI, serialGenerator, addHour, $timeout, $location, $q, localStorageService) {
+angular.module("timeControl").controller("registerController", function ($scope, activityAPI, functionsForHours, $timeout, $location, $q, localStorageService) {
     
     $scope.savedSuccessfully = false;
     $scope.message = "";
@@ -9,11 +9,11 @@ angular.module("timeControl").controller("registerController", function ($scope,
         
         activityAPI.signUp(registration).success(function (response) {
             $scope.savedSuccessfully = true;
-            $scope.message = "Cadastro realizado com sucesso, aguarde!";
+            $scope.message = "Registration successful, wait!";
             startTimer();
         }).error(function (data) {
             $scope.alert = false;
-			$scope.message = "Favor verificar os campo preenchidos, e certifique a senha inserida!";
+			$scope.message = data;
 		});
     };
     

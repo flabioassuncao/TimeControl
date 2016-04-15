@@ -10,51 +10,55 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
 		return $http.get(config.baseUrl + "/Activity");
 	};
     
-    var _getActivityUser = function (user) {
-		return $http.get(config.baseUrl + "/Activity/GetAllUser/" + user);
+    var _getActivityUser = function (User) {
+		return $http.get(config.baseUrl + "/Activity/GetAllUser/" + User);
 	};
     
-    var _updateActivity = function (activity) {
-		return $http.put(config.baseUrl + "/Activity", activity);
+    var _getActivityId = function (Id) {
+		return $http.get(config.baseUrl + "/Activity/" + Id);
 	};
     
-    var _updateTime = function(time) {
-        return $http.put(config.baseUrl + "/Activity/UpdateTime", time);
+    var _updateActivity = function (Activity) {
+		return $http.put(config.baseUrl + "/Activity", Activity);
+	};
+    
+    var _updateTime = function(Time) {
+        return $http.put(config.baseUrl + "/Activity/UpdateTime", Time);
     }
     
-	var _saveActivity = function (activity) {
-		return $http.post(config.baseUrl + "/Activity", activity).success(function (response) {
-                localStorageService.set('idActivityData', { idActivity: activity.activityId});
+	var _saveActivity = function (Activity) {
+		return $http.post(config.baseUrl + "/Activity", Activity).success(function (response) {
+            localStorageService.set('idActivityData', { idActivity: response.activityId});
         }).error(function (err, status) {
            
         });
 	};
     
-    var _saveTime = function (time) {
-        return $http.post(config.baseUrl + "/Activity/SaveTime", time).success(function (response) {
-                localStorageService.set('idTimeData', { idTime: time.TimeId});
+    var _saveTime = function (Time) {
+        return $http.post(config.baseUrl + "/Activity/SaveTime", Time).success(function (response) {
+            localStorageService.set('idTimeData', { idTime: response.TimeId});
         }).error(function (err, status) {
            
         });
     }
     
-    var _deleteActivity = function(activity){
-        return $http.delete(config.baseUrl + "/Activity/" + activity);
+    var _deleteActivity = function(Activity){
+        return $http.delete(config.baseUrl + "/Activity/" + Activity);
     }
     
-    var _deleteTime = function(timeId){
-        return $http.delete(config.baseUrl + "/Activity/DeleteTime/" + timeId);
+    var _deleteTime = function(TimeId){
+        return $http.delete(config.baseUrl + "/Activity/DeleteTime/" + TimeId);
     }
     
-    var _singUp = function(user){
-        return $http.post("http://localhost:5000/Account/Register", user);
+    var _singUp = function(User){
+        return $http.post("http://localhost:5000/Account/Register", User);
     }
     
-    var _login = function(loginData) {
-            return $http.post("http://localhost:5000/Account/Login", loginData).success(function (response) {
-                localStorageService.set('authorizationData', { userName: loginData.Email, authenticationUser: true });
+    var _login = function(LoginData) {
+            return $http.post("http://localhost:5000/Account/Login", LoginData).success(function (response) {
+                localStorageService.set('authorizationData', { userName: LoginData.Email, authenticationUser: true });
                 _authentication.isAuth = true;
-                _authentication.userName = loginData.Email;
+                _authentication.userName = LoginData.Email;
                 _authentication.useRefreshTokens = false;
                 
         }).error(function (err, status) {
@@ -96,9 +100,9 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
         return idTimeData.idTime;
     }
     
-    var _continueActivity = function(activity)
+    var _continueActivity = function(Activity)
     {
-       localStorageService.set('continueActivity', { Link: activity.Link, Observation: activity.Observation});
+       localStorageService.set('continueActivity', { Link: Activity.Link, Observation: Activity.Observation});
     }
     
 	return {
@@ -110,7 +114,7 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
         authentication: _authentication,
         logOut: _logOut,
         fillAuthData: _fillAuthData,
-        verificarAutenticacao: _checkAuthentication,
+        checkAuthentication: _checkAuthentication,
         updateActivity: _updateActivity,
         recuperarIdActivity: _restoreIdActivity,
         continuarActivity: _continueActivity,
@@ -118,6 +122,7 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
         saveTime: _saveTime,
         recuperarIdTime: _restoreIdTime,
         deleteTime: _deleteTime,
-        getActivityUser: _getActivityUser
+        getActivityUser: _getActivityUser,
+        getActivityId: _getActivityId
 	};
 });

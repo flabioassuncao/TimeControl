@@ -1,53 +1,60 @@
-            <div ng-hide="teste">
-                <div class="intro">
-                    <div class="dtable hw100">
-                        <div class="dtable-cell hw100">
-                            <div class="container text-center">
-                                <h1 class="intro-title animated fadeInDown"> TIME CONTROL </h1>
-                                <p class="sub animateme fittext3 animated fadeIn"> Control the time you devote to your project </p>
-                                <div ng-show="!divStart" class="row search-row animated animated lightSpeedIn">
-                                    <form name="userForm">
-                                        <div class="col-lg-4 col-sm-4 search-col relative locationicon">
-                                            <i class="icon-location-2 icon-append"></i>
-                                            <input type="text" name="country" id="link" class="form-control locinput input-rel searchtag-input" placeholder="What are you working on?" ng-model="activity.Link" required>
-                                        </div>
-                                        <div class="col-lg-4 col-sm-4 search-col">
-                                            <button ng-click="createActivity(activity);takeAction();valueStartDate();HideStart()" type="submit" class="btn btn-primary btn-search btn-block" ng-disabled="userForm.$invalid"><strong>Start</strong></button>
-                                        </div>
-                                    </form>
+<div>
+    <div class="intro">
+        <div class="dtable hw100">
+            <div class="dtable-cell hw100">
+                <div class="container text-center">
+                    <h1 class="intro-title animated fadeInDown"> TIME CONTROL </h1>
+                    <p class="sub animateme fittext3 animated fadeIn"> Control the time you devote to your project </p>
+                    <div ng-show="!divStart" class="row search-row animated animated lightSpeedIn">
+                        <form name="userForm">
+                            <div class="col-lg-8 col-sm-8 search-col relative locationicon">
+                                <!--<input type="text" name="country" id="link" class="form-control locinput input-rel searchtag-input" placeholder="What are you working on?" ng-model="activity.Link" required>-->
+                                <md-autocomplete ng-disabled="isDisabled" md-no-cache="noCache" md-selected-item="selectedItem" md-search-text-change="searchTextChange(searchText)" md-search-text="searchText" md-selected-item-change="selectedItemChange(item)" md-items="item in querySearch(searchText)" md-item-text="item.Link" md-min-length="0" placeholder="What are you working on?" required  >
+                                    <md-item-template>
+                                        <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.Link}}</span>
+                                    </md-item-template>
+                                    <md-not-found>
+                                        Activity: "{{searchText}}" Not Found.
+                                    </md-not-found>
+                                </md-autocomplete>
+                            </div>
+                            <div class="col-lg-4 col-sm-4 search-col">
+                                <button ng-click="createActivity(activity);takeAction();valueStartDate();HideStart()" type="submit" class="btn btn-primary btn-search btn-block" ng-disabled="userForm.$invalid"><strong>Start</strong></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 page-content col-thin-right">
+                    <div class="inner-box category-content">
+                        <h2 ng-model="activity.Link" ng-bind="activity.Link" class="title-2">{{searchText}}</h2>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 ">
+                                <textarea class="form-control" rows="5" id="comment" placeholder="Description project..." ng-model="activity.Observation" required></textarea> 
+                                <input type="text" id="startDate" ng-bind="StartDate" ng-model="StartDate" value="" ng-show="false">
+                                <input type="text" id="endDate" ng-bind="EndDate" ng-model="EndDate" value="" ng-show="false">
+                                <br />
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div id="divTimeAndPause" class="cat-list">
+                                    <p> 
+                                        <a ng-show="tagStop" ng-click="takeAction();updateActivity(activity);HideStart()" class="colorlink fa fa-pause fa-2x"></a> &nbsp
+                                        <a ng-show="tagRestart" ng-click="ContinueActivity()" class="colorlink fa fa-repeat fa-2x"></a>
+                                        
+                                    </p>
+                                    <h3 id="tempo" ng-bind="Duration" ng-model="Duration" class="cat-title">{{counter|formatTimer}}</h3>
                                 </div>
+                                <br />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="main-container">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-12 page-content col-thin-right">
-                                <div class="inner-box category-content">
-                                    <!--<div ng-bind-html="activity.Link | formatLink">
-                                     </div>-->
-                                    <h2 ng-bind="activity.Link"  class="title-2"></h2>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6 ">
-                                            <textarea class="form-control" rows="5" id="comment" placeholder="Description project..." ng-model="activity.Observation" required></textarea>
-                                            <input  type="text" id="startDate" value="" ng-show="false">
-                                            <input  type="text" id="endDate" value="" ng-show="false">
-                                            
-                                        </div>
-                                        <div class="col-md-6 col-sm-6">
-                                            <div class="cat-list" style="text-align:center;">
-                                                <p> <a ng-show="tagStop" ng-click="takeAction();updateActivity(activity);HideStart()" class="btn btn-danger btn-xs icon-stop fa"></a></p>
-                                                <!--<a ng-show="tagAstart" ng-click="takeAction();updateActivity(activity)">Start / Pause</a> -->
-                                                <h3 id="tempo" style="font-size: 50px;line-height: 70px; " class="cat-title">{{counter|formatTimer}}</h3>
-                                                <a ng-show="tagAfinish" ng-click="updateFinishActivity(activity);HideStart()">Finish</a>
-                                            </div>
-                                            <br />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> 
             </div>
+        </div>
+    </div> 
+</div>

@@ -1,64 +1,43 @@
-            <div class="main-container">
-				<div class="container">
-					<div class="row">
-						<div class="col-sm-5 login-box">
-							<div class="panel panel-default">
-								<div class="panel-intro text-center">
-									<h2 class="logo-title">
-									<span class="logo-icon"><i class="icon icon-clock ln-shadow-logo shape-0"></i> </span> Time<span>Control </span> </h2>
-								</div>
-								<div class="panel-body">
-									<form class="form-horizontal" role="form">
-                                        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
-										<div class="form-group">
-											<label  class="control-label">Username:</label>
-											<div class="input-icon"> <i class="icon-user fa"></i>
-												<input ng-model="loginData.Email" type="text" placeholder="Username" required class="form-control email">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label">Password:</label>
-											<div class="input-icon"> <i class="icon-lock fa"></i>
-												<input ng-model="loginData.Password" type="password" class="form-control" required placeholder="Password" id="user-pass">
-											</div>
-										</div>
-										<div class="form-group">
-                                            <button ng-click="login(loginData)"  class="btn btn-primary  btn-block">Log in</button>
-										</div>
-                                        <div ng-hide="alert" class="alert alert-danger"><strong>{{message}}</strong> </div>                                 
-									</form>
-								</div>
-								<div class="panel-footer">
-									<div class="checkbox pull-left">
-										<!--<label>  <input type="checkbox" value="1" name="remember" id="remember"> Keep me logged in </label>-->
-									</div>
-									<p class="text-center pull-right"> <a href="#"> Lost your password? </a> </p>
-									<div style=" clear:both"></div>
-								</div>
-							</div>
-						<div class="login-box-btm text-center">
-                            <p> Don't have an account? <br>
-                            <a href="#/register"><strong>Sign Up !</strong> </a> <br>
-                            <!--<p> or <br></p>-->
-                            <!--@{
-                                  var loginProviders = loginManager.GetExternalAuthenticationSchemes().ToList();
-                                      if (loginProviders.Count > 0){
-                                          <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-                                              <div>
-                                                  <p>
-                                                      @foreach (var provider in loginProviders)
-                                                      {
-                                                          if(@provider.AuthenticationScheme == "Google" || @provider.AuthenticationScheme == "Facebook"){
-                                                            <button type="submit" class="btn btn-danger" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
-                                                           }
-                                                       }
-                                                  </p>
-                                               </div>
-                                          </form>
-                                      }                                            
-                              }-->
+<div class="main-container">
+    <div class="container">
+	   <div class="row">
+	       <div class="col-sm-5 login-box">
+		      <div class="panel panel-default">
+			     <div class="panel-intro text-center">
+				    <h2 class="logo-title">
+				    <span class="logo-icon"><i class="icon icon-clock ln-shadow-logo shape-0"></i> </span> Time<span>Control </span> </h2>
+				 </div>
+				 <div class="panel-body">
+				    <form name="loginForm" class="form-horizontal" role="form">
+                        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+						<div class="form-group">
+						  <label  class="control-label">Login:</label>
+						  <div class="input-icon"> <i class="icon-user fa"></i>
+						      <input ng-model="loginData.Email" type="email" placeholder="Username" required class="form-control email">
+						  </div>
 						</div>
+						<div class="form-group">
+						  <label class="control-label">Password:</label>
+						  <div class="input-icon"> <i class="icon-lock fa"></i>
+						      <input ng-model="loginData.Password" type="password" class="form-control" required placeholder="Password" id="user-pass">
+						  </div>
 						</div>
-					</div>
-				</div>
-			</div>
+						<div class="form-group">
+                            <button ng-click="login(loginData)"  class="btn btn-primary  btn-block" ng-disabled="loginForm.$invalid">Log in</button>
+						</div>
+                        <div ng-hide="alert" class="alert alert-danger"><strong>{{message}}</strong> </div>                                 
+				    </form>
+				 </div>
+				 <div class="panel-footer">
+				    <div class="checkbox pull-left"></div>
+					<!--<p class="text-center pull-right"> <a href="#"> Lost your password? </a> </p>-->
+				 </div>
+		      </div>
+			  <div class="login-box-btm text-center">
+                <p> Don't have an account? <br>
+                <a class="colorlink" href="#/register"><strong>Sign Up !</strong> </a> <br>
+			  </div>
+	       </div>
+	   </div>
+    </div>
+</div>

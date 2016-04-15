@@ -1,14 +1,16 @@
-angular.module("timeControl").controller("timerController", function ($scope, activityAPI, serialGenerator, addHour, $timeout, $location, $q, localStorageService) {
+angular.module("timeControl").controller("timerController", function ($scope, $log, $route, activityAPI, functionsForHours, $timeout, $location, $q, localStorageService) {
     
     $scope.timeTotal;
     $scope.counter = 0;
-    $scope.teste = false;
+    $scope.Duration = "00H 00M 00S";
+    $scope.activity = {};
+    $scope.tagRestart = false;
     
     $scope.timeTotal = function(){
         var total = "00:00:00";
         for(var i = 0; i < $scope.act.length; i++){
             var hora = $scope.act[i];
-            total = addHour.addHoras(total, hora.Time, false);
+            total = functionsForHours.addHoras(total, hora.Time, false);
         }
         return total;
     }
@@ -29,14 +31,16 @@ angular.module("timeControl").controller("timerController", function ($scope, ac
             $timeout.cancel(mytimeout);
              $scope.tagStart = true;
              $scope.tagStop = false;
-             document.getElementById('endDate').value = moment().format();
+             $scope.EndDate = moment().format();
+             $scope.tagRestart = true;
         }
         else
         {
             mytimeout = $timeout($scope.onTimeout,1000);
             $scope.tagStart = false;
             $scope.tagStop = true;
-            document.getElementById('endDate').value = moment().format();
+            $scope.EndDate = moment().format();
+            $scope.tagRestart = false;
         }
             $scope.stopped=!$scope.stopped;
     }
@@ -45,145 +49,156 @@ angular.module("timeControl").controller("timerController", function ($scope, ac
         var total = "00:00:00";
         for(var i = 0; i < $scope.act.length; i++){
             var hora = $scope.act[i];
-            total = addHour.addHoras(total, hora.Time, false);
+            total = functionsForHours.addHoras(total, hora.Time, false);
         }
         return total;
     }
     
     $scope.HideStart = function(){
         if($scope.divStart == true){
-            $scope.divStart = false;
-            $scope.tagAstart = false;
-            $scope.tagStart = false;
+            $scope.divStart = false; $scope.tagAstart = false; $scope.tagStart = false;
         }
         else{
-            $scope.divStart = true;
-            $scope.tagAstart = true;
-            $scope.tagStop = true;
-            
-        }  
+            $scope.divStart = true; $scope.tagAstart = true; $scope.tagStop = true;
+         }
     }
     
     $scope.valueStartDate = function (){
-        document.getElementById('startDate').value = moment().format();
-    }
-    
-    $scope.adicionarActivity = function (activity) {
-		  activity.activityId = serialGenerator.generate();
-          activity.EndDate = moment().format();
-          activity.StartDate = document.getElementById('startDate').value;
-          var tempo = document.getElementById('tempo').innerText;
-          tempo = tempo.replace("H ", ":");
-          tempo = tempo.replace("M ", ":");
-          tempo = tempo.replace("S", "");
-          activity.Time = tempo
-          activity.Responsible = activityAPI.authentication.userName;
-		  activityAPI.saveActivity(activity).success(function (data) {
-			 delete $scope.activity;
-             document.getElementById('tempo').innerText  = '00H 00M 00S';
-		});
-	};
-    
-    var authen = function (){
-        activityAPI.verificarAutenticacao();
+        $scope.StartDate = moment().format(); 
     }
     
     $scope.createActivity = function(activity){
-        activity.activityId = serialGenerator.generate();
+        activity.Link = $scope.searchText
         activity.Responsible = activityAPI.authentication.userName;
         activityAPI.saveActivity(activity).success(function (data) {
-			var time = {};
-                time.TimeId = serialGenerator.generate();
-                time.StartDate = document.getElementById('startDate').value;
-                time.ActivityId = activity.activityId;
-                time.ActivityTime = "00:00:00";
-                activityAPI.saveTime(time);
+            var time = {};
+            time.StartDate = $scope.StartDate
+            time.ActivityId = data.activityId;
+            time.ActivityTime = "00:00:00";
+            activityAPI.saveTime(time);
+            localStorageService.set('lastActivity', { lastIdActivity: data.activityId});
 		});
     }
     
     $scope.createTime = function (){
         var time = {};
-        time.TimeId = serialGenerator.generate();
-        time.StartDate = document.getElementById('startDate').value;
+        time.StartDate = $scope.StartDate;
         time.ActivityId = activityAPI.recuperarIdActivity();
         activityAPI.saveTime(time);
     }
     
     $scope.updateActivity = function(activity)
     {
-          activity.activityId = activityAPI.recuperarIdActivity();
-          activity.Responsible = activityAPI.authentication.userName;
-          activity.Status = true;
-          activity.StartDate = document.getElementById('startDate').value;
-          activity.EndDate = document.getElementById('endDate').value;
-          var tempo = document.getElementById('tempo').innerText;
-          tempo = tempo.replace("H ", ":");
-          tempo = tempo.replace("M ", ":");
-          tempo = tempo.replace("S", "");
-          activity.Time = tempo  
-          activityAPI.updateActivity(activity).success(function (data) {
+        activity.activityId = activityAPI.recuperarIdActivity();
+        activity.Responsible = activityAPI.authentication.userName;
+        activity.Status = true;
+        activityAPI.updateActivity(activity).success(function (data) {
             updateTime();  
 			delete $scope.activity;
-            document.getElementById('tempo').innerText  = '00H 00M 00S';
+            $scope.Duration = '00H 00M 00S';
             $scope.counter = 0;
             localStorageService.remove('continueActivity');
 		});
-            
     }
     
     var updateTime = function () {
         var time = {};
         time.TimeId = activityAPI.recuperarIdTime();
-        time.StartDate = document.getElementById('startDate').value;
-        time.EndDate = document.getElementById('endDate').value;
-        var dt1 = moment(time.StartDate, "YYYY/MM/DD hh:mm:ss");
-        var dt2 = moment(time.EndDate, "YYYY/MM/DD hh:mm:ss");
-        time.ActivityTime = converterSegundos(dt2.diff(dt1, 'seconds'));
+        time.StartDate = $scope.StartDate;
+        time.EndDate = $scope.EndDate;
+        time.ActivityTime = functionsForHours.transformingSeconds(functionsForHours.turningForSeconds(time.StartDate, time.EndDate));
         time.status = true;
         activityAPI.updateTime(time);
-        
-    }
-    
-    var converterSegundos = function (s){
-              
-        function duas_casas(numero){
-            if (numero <= 9){
-                numero = "0"+numero;
-            }
-            return numero;
-        }
-
-        var hora = duas_casas(Math.round(s/3600));
-        var minuto = duas_casas(Math.floor((s%3600)/60));
-        var segundo = duas_casas((s%3600)%60);
-                
-        var formatado = hora+":"+minuto+":"+segundo;
-                
-        return formatado;
-    }
-    
-    $scope.updateFinishActivity = function(activity)
-    {
-          activity.activityId = activityAPI.recuperarIdActivity();
-          
-          activity.Status = true;
-          activity.status = true;
-          activity.StartDate = document.getElementById('startDate').value;
-          activity.EndDate = document.getElementById('endDate').value;
-          var tempo = document.getElementById('tempo').innerText;
-          tempo = tempo.replace("H ", ":");
-          tempo = tempo.replace("M ", ":");
-          tempo = tempo.replace("S", "");
-          activity.Time = tempo 
-          
-          activityAPI.updateActivity(activity).success(function (data) {
-			 delete $scope.activity;
-             document.getElementById('tempo').innerText  = '00H 00M 00S';
-             localStorageService.remove('continueActivity');
-		});
     }
     
     var atividadeAberta = function (){
+        var user = activityAPI.authentication.userName;
+        if(user){
+            activityAPI.getActivityUser(user).success(function (data) {
+                $scope.states        = loadAll(data);
+                var objts = data, resul, timer, item, obj;
+                var authData = localStorageService.get('authorizationData');
+                if(authData){
+                    for(item in objts){
+                        for(obj in objts[item].Times){
+                            if(objts[item].Times[obj].status == false && objts[item].Responsible == authData.userName){
+                                timer = objts[item].Times[obj];
+                                resul = objts[item];
+                            }
+                        }
+                    }
+                    if(resul){
+                        $scope.activity = resul;
+                        var difference = functionsForHours.turningForSeconds(timer.StartDate, moment().format());
+                        $scope.Duration = functionsForHours.convertToFormatView(moment.duration(difference,'seconds'));
+                        $scope.counter = difference;
+                        $scope.divStart = true; $scope.tagStop = true; $scope.stopped = false;
+                        $scope.StartDate = timer.StartDate;
+                        localStorageService.set('idActivityData', { idActivity: resul.activityId});
+                        localStorageService.set('idTimeData', { idTime: timer.TimeId});
+                    }
+                }
+            });
+        }
+    }
+    
+    
+    $scope.simulateQuery = false;
+    $scope.isDisabled    = false;
+
+    $scope.querySearch   = querySearch;
+    $scope.selectedItemChange = selectedItemChange;
+    $scope.searchTextChange   = searchTextChange;
+    
+    function querySearch (query) {
+        
+      var results = query ? $scope.states.filter( createFilterFor(query) ) : $scope.states,
+          deferred;
+      if ($scope.simulateQuery) {
+        deferred = $q.defer();
+        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        return deferred.promise;
+      } else {
+        return results;
+      }
+    }
+
+    function searchTextChange(text) {
+    //   $log.info('Text changed to ' + text);
+    }
+
+    function selectedItemChange(item) {
+        var time = {};
+        time.StartDate = moment().format();;
+        time.ActivityId = item.activityId;
+        activityAPI.saveTime(time);
+        var timer = $timeout(function () {
+          $timeout.cancel(timer);
+          $route.reload();
+        }, 2000);
+    }
+
+    function loadAll(ok) {
+        
+      return ok.map( function (repo) {
+        
+        repo.value = repo.Link.toLowerCase();
+        return repo;
+      });
+    }
+
+    function createFilterFor(query) {
+      var lowercaseQuery = angular.lowercase(query);
+
+      return function filterFn(state) {
+        return (state.value.indexOf(lowercaseQuery) === 0);
+      };
+
+    }
+    
+    $scope.ContinueActivity = function(){
+        var IdActivity = localStorageService.get('lastActivity');
+            
         activityAPI.getActivity().success(function (data) {
 			var objts = data, resul, timer, item, obj;
             var authData = localStorageService.get('authorizationData');
@@ -195,30 +210,31 @@ angular.module("timeControl").controller("timerController", function ($scope, ac
                     }
                 }
             }
-            if(resul){
-                $scope.activity = resul;
-                var dt1 = moment(timer.StartDate, "YYYY/MM/DD hh:mm:ss");
-                var dt2 = moment(moment().format(), "YYYY/MM/DD hh:mm:ss");
-                var difference = dt2.diff(dt1, 'seconds');
-                var x = moment.duration(difference,'seconds')
-                var h = x.hours().toString().length == 2? x.hours() : ("0" + x.hours());
-                var m = x.minutes().toString().length == 2? x.minutes() : ("0" + x.minutes());
-                var s = x.seconds().toString().length == 2? x.seconds() : ("0" + x.seconds());
-                document.getElementById('tempo').innerText  = h + "H " + m + "M " + s + "S";
-                $scope.counter = difference;
-                $scope.divStart = true;
-                $scope.tagStop = true;
-                $scope.stopped = false;
-                document.getElementById('startDate').value = timer.StartDate;
-                localStorageService.set('idActivityData', { idActivity: resul.activityId});
-                localStorageService.set('idTimeData', { idTime: timer.TimeId});
+            if (resul){
+                toastr["warning"]("There is already an activity running!")
+            } else {
+                var time = {};
+                time.StartDate = moment().format();
+                time.ActivityTime = "00:00:00";
+                time.ActivityId = IdActivity.lastIdActivity;
+                time.status = false;
+                activityAPI.saveTime(time);
+                
+                toastr.options = {"progressBar": true, "timeOut": "2000",}
+                toastr["info"]("Wait!!");
+                $scope.tagRestart = false;
+                
+                var timer = $timeout(function () {
+                    $timeout.cancel(timer);
+                    $route.reload();
+                }, 2000);
             }
+            
 		}).error(function (data, status) {
 		});
     }
     
-    authen();
-    // continuarActivity();
+    activityAPI.checkAuthentication();
     atividadeAberta();
     
 });

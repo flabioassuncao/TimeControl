@@ -11,7 +11,6 @@ namespace TimeControl.Interfaces.Repository
       IEnumerable<Activity> GetAll();
       IEnumerable<Activity> GetAllUser(string responsible);
       Activity Find(Guid Id);
-      Activity Find(string user);
       void Remove(Guid Id);
       void Update([FromBody] Activity activity);
       void SaveTime(Time time);

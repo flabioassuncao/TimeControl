@@ -9,6 +9,10 @@ using TimeControl.Repository;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Infra.Data.Context;
 using TimeControl.Interfaces.Repository;
+using TimeControl.Application.Interface;
+using TimeControl.Service.Application;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace TimeControl
 {
@@ -43,10 +47,16 @@ namespace TimeControl
                 .AddDefaultTokenProviders();
             
             // Add framework services.
+            services.AddMvc().AddJsonOptions(options => {
+                // options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+            
             services.AddMvc();
             
             //using Dependency Injection
             services.AddSingleton<IActivityRepository, ActivityRepository>();
+            services.AddTransient<IActivityService, ActivityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

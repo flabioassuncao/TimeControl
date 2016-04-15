@@ -5,9 +5,9 @@ angular.module("timeControl").config(function ($routeProvider) {
 		controller: "timerController",
 	});
     
-    $routeProvider.when("/projects", {
-		  templateUrl: "js/views/projects.html",
-		  controller: "projectController"
+    $routeProvider.when("/activities", {
+		  templateUrl: "js/views/activities.html",
+		  controller: "activitiesController"
 	});
     
     $routeProvider.when("/login", {

@@ -1,4 +1,4 @@
-angular.module("timeControl").controller("timeControlCtrl", function ($scope, activityAPI, serialGenerator, addHour, $timeout, $location, $q, localStorageService) {
+angular.module("timeControl").controller("timeControlCtrl", function ($scope, activityAPI, serialGenerator, functionsForHours, $timeout, $location, $q, localStorageService) {
 	$scope.app = "Time Control";
 	$scope.activities = [];
     $scope.timeTotal;
@@ -82,7 +82,7 @@ angular.module("timeControl").controller("timeControlCtrl", function ($scope, ac
         var total = "00:00:00";
         for(var i = 0; i < $scope.act.length; i++){
             var hora = $scope.act[i];
-            total = addHour.addHoras(total, hora.Time, false);
+            total = functionsForHours.addHoras(total, hora.Time, false);
         }
         return total;
     }
