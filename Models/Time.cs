@@ -8,8 +8,8 @@ namespace TimeControl.Models
        public DateTime StartDate  { get; set; }
        public DateTime EndDate { get; set; }
        public string ActivityTime { get; set; }
-       public bool status { get; set; }
-       public Guid activityId { get; set; }
+       public bool Status { get; set; }
+       public Guid ActivityId { get; set; }
        public virtual Activity Activity { get; set; }
    }
 }

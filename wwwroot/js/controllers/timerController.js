@@ -68,15 +68,15 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
     }
     
     $scope.createActivity = function(activity){
-        activity.Link = $scope.searchText
+        activity.Link = $scope.searchText;
         activity.Responsible = activityAPI.authentication.userName;
         activityAPI.saveActivity(activity).success(function (data) {
             var time = {};
-            time.StartDate = $scope.StartDate
-            time.ActivityId = data.activityId;
+            time.StartDate = $scope.StartDate;
+            time.ActivityId = data.ActivityId;
             time.ActivityTime = "00:00:00";
             activityAPI.saveTime(time);
-            localStorageService.set('lastActivity', { lastIdActivity: data.activityId});
+            localStorageService.set('lastActivity', { lastIdActivity: data.ActivityId});
 		});
     }
     
@@ -89,9 +89,8 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
     
     $scope.updateActivity = function(activity)
     {
-        activity.activityId = activityAPI.recuperarIdActivity();
+        activity.ActivityId = activityAPI.recuperarIdActivity();
         activity.Responsible = activityAPI.authentication.userName;
-        activity.Status = true;
         activityAPI.updateActivity(activity).success(function (data) {
             updateTime();  
 			delete $scope.activity;
@@ -107,7 +106,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
         time.StartDate = $scope.StartDate;
         time.EndDate = $scope.EndDate;
         time.ActivityTime = functionsForHours.transformingSeconds(functionsForHours.turningForSeconds(time.StartDate, time.EndDate));
-        time.status = true;
+        time.Status = true;
         activityAPI.updateTime(time);
     }
     
@@ -121,7 +120,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
                 if(authData){
                     for(item in objts){
                         for(obj in objts[item].Times){
-                            if(objts[item].Times[obj].status == false && objts[item].Responsible == authData.userName){
+                            if(objts[item].Times[obj].Status == false && objts[item].Responsible == authData.userName){
                                 timer = objts[item].Times[obj];
                                 resul = objts[item];
                             }
@@ -134,7 +133,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
                         $scope.counter = difference;
                         $scope.divStart = true; $scope.tagStop = true; $scope.stopped = false;
                         $scope.StartDate = timer.StartDate;
-                        localStorageService.set('idActivityData', { idActivity: resul.activityId});
+                        localStorageService.set('idActivityData', { idActivity: resul.ActivityId});
                         localStorageService.set('idTimeData', { idTime: timer.TimeId});
                     }
                 }
@@ -170,8 +169,10 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
     function selectedItemChange(item) {
         var time = {};
         time.StartDate = moment().format();;
-        time.ActivityId = item.activityId;
+        time.ActivityId = item.ActivityId;
         activityAPI.saveTime(time);
+        toastr.options = {"progressBar": true, "timeOut": "2000",}
+        toastr["info"]("Wait!!");
         var timer = $timeout(function () {
           $timeout.cancel(timer);
           $route.reload();
@@ -204,7 +205,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
             var authData = localStorageService.get('authorizationData');
             for(item in objts){
                 for(obj in objts[item].Times){
-                    if(objts[item].Times[obj].status == false && objts[item].Responsible == authData.userName){
+                    if(objts[item].Times[obj].Status == false && objts[item].Responsible == authData.userName){
                         timer = objts[item].Times[obj];
                         resul = objts[item];
                     }
@@ -217,7 +218,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
                 time.StartDate = moment().format();
                 time.ActivityTime = "00:00:00";
                 time.ActivityId = IdActivity.lastIdActivity;
-                time.status = false;
+                time.Status = false;
                 activityAPI.saveTime(time);
                 
                 toastr.options = {"progressBar": true, "timeOut": "2000",}

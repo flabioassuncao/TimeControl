@@ -11,7 +11,7 @@ namespace Infra.Map
            entityBuilder.HasKey(x => x.TimeId);
            entityBuilder.Property(x => x.StartDate).IsRequired();
            entityBuilder.Property(x => x.EndDate).IsRequired();
-           entityBuilder.Property(x => x.activityId).IsRequired();
+           entityBuilder.Property(x => x.ActivityId).IsRequired();
            
            entityBuilder.HasOne(x => x.Activity).WithMany(x => x.Times).OnDelete(DeleteBehavior.Restrict);    
        }

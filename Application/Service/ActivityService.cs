@@ -18,7 +18,7 @@ namespace TimeControl.Service.Application
         
         public Activity Add(Activity activity)
         {
-            activity.activityId = Guid.NewGuid();
+            activity.ActivityId = Guid.NewGuid();
             _activityRepository.Add(activity);
             return activity;
         }

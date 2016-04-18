@@ -5,7 +5,7 @@ namespace TimeControl.Models
 {
    public class Activity
    {
-       public Guid activityId { get; set; }
+       public Guid ActivityId { get; set; }
        public string Observation { get; set; }
        public string Link { get; set; }
        public bool Status { get; set; }

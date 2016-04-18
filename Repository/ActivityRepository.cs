@@ -30,7 +30,7 @@ namespace TimeControl.Repository
         {            
             return _context.Activities
                     .Include(a => a.Times)
-                    .FirstOrDefault(a => a.activityId.Equals(Id));
+                    .FirstOrDefault(a => a.ActivityId.Equals(Id));
         }
 
         public IEnumerable<Activity> GetAll()
@@ -41,14 +41,14 @@ namespace TimeControl.Repository
 
         public void Remove(Guid Id)
         {
-            var entity = _context.Activities.First(t => t.activityId == Id);
+            var entity = _context.Activities.First(t => t.ActivityId == Id);
             _context.Activities.Remove(entity);
             _context.SaveChanges();
         }
 
         public void Update([FromBody] Activity activity)
         {
-            var itemToUpdate = _context.Activities.SingleOrDefault(r => r.activityId == activity.activityId);
+            var itemToUpdate = _context.Activities.SingleOrDefault(r => r.ActivityId == activity.ActivityId);
             if (itemToUpdate != null)
             {
                 itemToUpdate.Observation = activity.Observation;
@@ -73,7 +73,7 @@ namespace TimeControl.Repository
                 itemToUpdate.ActivityTime = time.ActivityTime;
                 itemToUpdate.StartDate = time.StartDate;
                 itemToUpdate.EndDate = time.EndDate;
-                itemToUpdate.status = time.status;
+                itemToUpdate.Status = time.Status;
             }
             _context.SaveChanges();
         }

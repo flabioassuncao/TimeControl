@@ -8,7 +8,7 @@ namespace Infra.Map
    {
        public ActivityMap(EntityTypeBuilder<Activity> entityBuilder)
        {
-           entityBuilder.HasKey(x => x.activityId);
+           entityBuilder.HasKey(x => x.ActivityId);
            entityBuilder.Property(x => x.Link).IsRequired();
            
            entityBuilder.HasMany(x => x.Times).WithOne(x => x.Activity).OnDelete(DeleteBehavior.Restrict);       

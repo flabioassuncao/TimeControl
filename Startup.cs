@@ -11,7 +11,6 @@ using Infra.Data.Context;
 using TimeControl.Interfaces.Repository;
 using TimeControl.Application.Interface;
 using TimeControl.Service.Application;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace TimeControl
@@ -70,19 +69,6 @@ namespace TimeControl
             app.UseIdentity();
             
             app.UseStaticFiles();
-            
-            app.UseGoogleAuthentication(options =>
-            {
-                options.ClientId = "249241151826-hddd0ss3j3vebjvd4a2lkumgncspskha.apps.googleusercontent.com";
-                options.ClientSecret = "ybl66oQwwweygj8KNoP1qqhk";
-            });
-            
-            app.UseFacebookAuthentication (options =>
-            {
-               options.AppId = "1121775784524038";
-               options.AppSecret = "00a6b481bca61798983d89239eaf9f08"; 
-            });
-            
             
             app.UseMvc();
         }

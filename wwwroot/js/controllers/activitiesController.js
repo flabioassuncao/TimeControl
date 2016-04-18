@@ -16,14 +16,14 @@ angular.module("timeControl").controller("activitiesController", function ($scop
 	};
     
     $scope.ShowActivity = function (Activity) {
-        activityAPI.getActivityId(Activity.activityId).success(function (data) {
+        activityAPI.getActivityId(Activity.ActivityId).success(function (data) {
             $scope.onlyActivity = data;
         }).error(function (data, status) {
         });
     }
     
-    $scope.deletarActivity = function (activityId) {
-        activityAPI.deleteActivity(activityId).success(function (data) {
+    $scope.deletarActivity = function (ActivityId) {
+        activityAPI.deleteActivity(ActivityId).success(function (data) {
 			toastr["success"]("Deleted!");
 			loadActivity();
 		});
@@ -46,7 +46,7 @@ angular.module("timeControl").controller("activitiesController", function ($scop
             if(hora.Times.length > 0){
                 for(var x = 0; x < hora.Times.length; x++){
                    temp = hora.Times[x];
-                   if(temp.status){
+                   if(temp.Status){
                         total = functionsForHours.addHoras(total, temp.ActivityTime, false);
                    }
                 }
@@ -61,7 +61,7 @@ angular.module("timeControl").controller("activitiesController", function ($scop
             var authData = localStorageService.get('authorizationData');
             for(item in objts){
                 for(obj in objts[item].Times){
-                    if(objts[item].Times[obj].status == false && objts[item].Responsible == authData.userName){
+                    if(objts[item].Times[obj].Status == false && objts[item].Responsible == authData.userName){
                         timer = objts[item].Times[obj];
                         resul = objts[item];
                     }
@@ -73,7 +73,7 @@ angular.module("timeControl").controller("activitiesController", function ($scop
                 var time = {};
                 time.StartDate = moment().format();
                 time.ActivityTime = "00:00:00";
-                time.ActivityId = activity.activityId;
+                time.ActivityId = activity.ActivityId;
                 activityAPI.saveTime(time);
                 
                 toastr.options = {"progressBar": true, "timeOut": "2000",}
@@ -103,62 +103,8 @@ angular.module("timeControl").controller("activitiesController", function ($scop
         return $sce.trustAsHtml(value);
     };
     
-    $scope.onlyWeekendsPredicate = function(date) {
-        var day = date.getDay();
-        return day === 0 || day === 6;
-    }
-    
-    $scope.options = {
-        customClass: getDayClass,
-        showWeeks: true
-    };
-    
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    var afterTomorrow = new Date(tomorrow);
-    afterTomorrow.setDate(tomorrow.getDate() + 1);
-    $scope.events = [
-        {
-            date: tomorrow,
-            status: 'full'
-        },
-        {
-            date: afterTomorrow,
-            status: 'partially'
-        }
-    ];
-    
-    function getDayClass(data) {
-    var date = data.date,
-      mode = data.mode;
-        if (mode === 'day') {
-            var dayToCheck = new Date(date).setHours(0,0,0,0);
-            
-            for (var i = 0; i < $scope.events.length; i++) {
-                var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
-                if (dayToCheck === currentDay) {
-                    return $scope.events[i].status;
-                }
-            }
-        }
-
-        return '';
-    }
-      
-    $scope.open1 = function() {
-        $scope.popup1.opened = true;
-        $scope.filterteste = document.getElementById('timetime').value.substring(1, 11);
-    };
-    
-    $scope.popup1 = {
-        opened: false
-    };
-    
     activityAPI.checkAuthentication();
     loadActivity(); 
-    
-    
     
     $scope.searchName = function () {
         

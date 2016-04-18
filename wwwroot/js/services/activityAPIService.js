@@ -28,7 +28,7 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
     
 	var _saveActivity = function (Activity) {
 		return $http.post(config.baseUrl + "/Activity", Activity).success(function (response) {
-            localStorageService.set('idActivityData', { idActivity: response.activityId});
+            localStorageService.set('idActivityData', { idActivity: response.ActivityId});
         }).error(function (err, status) {
            
         });
