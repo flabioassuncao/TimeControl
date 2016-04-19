@@ -5,6 +5,23 @@ angular.module("timeControl").controller("activitiesController", function ($scop
    $scope.filterteste;
    $scope.datee = $scope.dt;
    
+   $scope.todos = [];
+    
+    $scope.addTodo = function(){
+      var todo =[{desc:'byActivity',done:false}]
+      $scope.todos = todo.concat($scope.todos);  
+      $scope.newTodo = '';
+      $scope.search = true;
+    }
+    
+    $scope.removeTodo = function(index) {
+      $scope.todos.splice(index,1);
+      delete $scope.criterioDeBusca;
+      delete $scope.initialDate
+      if($scope.todos.length == 0)
+        $scope.search = false;
+    }
+   
    var loadActivity = function () {
         var user = activityAPI.authentication.userName;
         if(user){
@@ -16,10 +33,7 @@ angular.module("timeControl").controller("activitiesController", function ($scop
 	};
     
     $scope.ShowActivity = function (Activity) {
-        activityAPI.getActivityId(Activity.ActivityId).success(function (data) {
-            $scope.onlyActivity = data;
-        }).error(function (data, status) {
-        });
+        $scope.criterioDeBusca = Activity.Link;
     }
     
     $scope.deletarActivity = function (ActivityId) {
@@ -75,12 +89,10 @@ angular.module("timeControl").controller("activitiesController", function ($scop
                 time.ActivityTime = "00:00:00";
                 time.ActivityId = activity.ActivityId;
                 activityAPI.saveTime(time);
-                
                 toastr.options = {"progressBar": true, "timeOut": "2000",}
                 toastr["info"]("Wait!!")
                 startTimer();
             }
-            
 		}).error(function (data, status) {
 		});
     }
@@ -107,12 +119,9 @@ angular.module("timeControl").controller("activitiesController", function ($scop
     loadActivity(); 
     
     $scope.searchName = function () {
-        
         if($scope.search)
             $scope.search = false;
-           
         else   
             $scope.search = true;
     }
-    
 });

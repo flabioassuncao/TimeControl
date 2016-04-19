@@ -55,6 +55,7 @@ namespace TimeControl.Repository
                 itemToUpdate.Link = activity.Link;
                 itemToUpdate.Responsible = activity.Responsible;
                 itemToUpdate.ResponsibleId = activity.ResponsibleId;
+                itemToUpdate.LastTimeWorked = activity.LastTimeWorked;
             }
              _context.SaveChanges();
         }

@@ -31,8 +31,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 page-content col-thin-right">
-                    <div class="inner-box category-content">
-                        <h2 ng-model="activity.Link" ng-bind="activity.Link" class="title-2">{{searchText}}</h2>
+                    <div class="inner-box category-content pag-time-link">
+                        <h2><div ng-bind-html="SkipValidation((searchText | formatLink))">  </div></h2> 
                         <div class="row">
                             <div class="col-md-6 col-sm-6 ">
                                 <textarea class="form-control" rows="5" id="comment" placeholder="Description project..." ng-model="activity.Observation" required></textarea> 
@@ -42,10 +42,7 @@
                             </div>
                             <div class="col-md-6 col-sm-6">
                                 <div id="divTimeAndPause" class="cat-list">
-                                    <p> 
-                                        <a ng-show="tagStop" ng-click="takeAction();updateActivity(activity);HideStart()" class="colorlink fa fa-pause fa-2x"></a> &nbsp
-                                        <a ng-show="tagRestart" ng-click="ContinueActivity()" class="colorlink fa fa-repeat fa-2x"></a>
-                                    </p>
+                                    <p><a ng-show="tagStop" ng-click="takeAction();updateActivity(activity);HideStart()" class="colorlink fa fa-pause fa-2x"></a> &nbsp </p>
                                     <h3 id="tempo" ng-bind="Duration" ng-model="Duration" class="cat-title">{{counter|formatTimer}}</h3>
                                 </div>
                                 <br />
@@ -55,5 +52,41 @@
                 </div>
             </div>
         </div>
+        <br>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 page-content col-thin-right">
+                    <div class="inner-box category-content">
+                        <h2 class="title-2"> Latest activities </h2>
+                        <div class="table-responsive">
+                            <table id="addManageTable" class="table table-striped table-bordered add-manage-table table demo" data-filter="#filter" data-filter-text-only="true" ng-show="activities.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th> Task </th>
+                                        <th> Actions </th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="activity in act = (activities) | orderBy: '-LastTimeWorked' | limitTo:3  ">
+                                        <td id="colActivityLink" class="add-img-td">
+                                            <div ng-bind-html="SkipValidation((activity.Link | formatLink))">  </div> 
+                                        </td>
+                                        <td id="colActivityActions" class="action-td">
+                                            <div>
+                                                <a ng-click="ContinueActivity(activity)" class="colorlink fa fa-play fa"> </a>&nbsp
+                                            </div>
+                                        </td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
     </div> 
 </div>
+
+
+

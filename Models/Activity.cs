@@ -12,5 +12,6 @@ namespace TimeControl.Models
        public IList<Time> Times { get; set; }
        public string Responsible { get; set; }
        public Guid ResponsibleId { get; set; }
+       public DateTime LastTimeWorked { get; set; }
    }
 }

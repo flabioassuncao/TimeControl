@@ -1,5 +1,5 @@
-angular.module("timeControl").controller("timerController", function ($scope, $log, $route, activityAPI, functionsForHours, $timeout, $location, $q, localStorageService) {
-    
+angular.module("timeControl").controller("timerController", function ($scope, $log, $sce, $route, activityAPI, functionsForHours, $timeout, $location, $q, localStorageService) {
+    $scope.activities = [];
     $scope.timeTotal;
     $scope.counter = 0;
     $scope.Duration = "00H 00M 00S";
@@ -91,11 +91,13 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
     {
         activity.ActivityId = activityAPI.recuperarIdActivity();
         activity.Responsible = activityAPI.authentication.userName;
+        activity.LastTimeWorked = moment().format();
         activityAPI.updateActivity(activity).success(function (data) {
             updateTime();  
-			delete $scope.activity;
+			$scope.activity = {};
             $scope.Duration = '00H 00M 00S';
             $scope.counter = 0;
+            $scope.searchText = "";
             localStorageService.remove('continueActivity');
 		});
     }
@@ -107,14 +109,17 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
         time.EndDate = $scope.EndDate;
         time.ActivityTime = functionsForHours.transformingSeconds(functionsForHours.turningForSeconds(time.StartDate, time.EndDate));
         time.Status = true;
-        activityAPI.updateTime(time);
+        activityAPI.updateTime(time).success(function () {
+            atividadeAberta();
+        });
     }
     
     var atividadeAberta = function (){
         var user = activityAPI.authentication.userName;
         if(user){
             activityAPI.getActivityUser(user).success(function (data) {
-                $scope.states        = loadAll(data);
+                $scope.states = loadAll(data);
+                $scope.activities = data;
                 var objts = data, resul, timer, item, obj;
                 var authData = localStorageService.get('authorizationData');
                 if(authData){
@@ -141,6 +146,9 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
         }
     }
     
+    $scope.SkipValidation = function(value) {
+        return $sce.trustAsHtml(value);
+    };
     
     $scope.simulateQuery = false;
     $scope.isDisabled    = false;
@@ -168,7 +176,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
 
     function selectedItemChange(item) {
         var time = {};
-        time.StartDate = moment().format();;
+        time.StartDate = moment().format();
         time.ActivityId = item.ActivityId;
         activityAPI.saveTime(time);
         toastr.options = {"progressBar": true, "timeOut": "2000",}
@@ -180,9 +188,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
     }
 
     function loadAll(ok) {
-        
       return ok.map( function (repo) {
-        
         repo.value = repo.Link.toLowerCase();
         return repo;
       });
@@ -194,10 +200,9 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
       return function filterFn(state) {
         return (state.value.indexOf(lowercaseQuery) === 0);
       };
-
     }
     
-    $scope.ContinueActivity = function(){
+    $scope.ContinueLastActivity = function(){
         var IdActivity = localStorageService.get('lastActivity');
             
         activityAPI.getActivity().success(function (data) {
@@ -231,6 +236,37 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
                 }, 2000);
             }
             
+		}).error(function (data, status) {
+		});
+    }
+    
+    $scope.ContinueActivity = function(activity){
+        activityAPI.getActivity().success(function (data) {
+			var objts = data, resul, timer, item, obj;
+            var authData = localStorageService.get('authorizationData');
+            for(item in objts){
+                for(obj in objts[item].Times){
+                    if(objts[item].Times[obj].Status == false && objts[item].Responsible == authData.userName){
+                        timer = objts[item].Times[obj];
+                        resul = objts[item];
+                    }
+                }
+            }
+            if(resul){
+                toastr["warning"]("There is already an activity running!")
+            }else{
+                var time = {};
+                time.StartDate = moment().format();
+                time.ActivityTime = "00:00:00";
+                time.ActivityId = activity.ActivityId;
+                activityAPI.saveTime(time);
+                toastr.options = {"progressBar": true, "timeOut": "2000",}
+                toastr["info"]("Wait!!")
+                var timer = $timeout(function () {
+                    $timeout.cancel(timer);
+                    $route.reload();
+                }, 2000);
+            }
 		}).error(function (data, status) {
 		});
     }

@@ -14,7 +14,7 @@ angular.module("timeControl").filter('betweenDate', function($filter) {
               var obj = value[column];
               var currentDate = Date.parse($filter('date')(obj, 'yyyy-MM-dd HH:mm:ss'));
                  if ((currentDate >= startDate &&  endDate >= currentDate)) {
-                    new_collection.push(value);         
+                    new_collection.push(value);
                  }
               });
           } else {
