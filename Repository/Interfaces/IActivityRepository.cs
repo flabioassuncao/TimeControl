@@ -10,6 +10,7 @@ namespace TimeControl.Interfaces.Repository
       void Add(Activity activity);
       IEnumerable<Activity> GetAll();
       IEnumerable<Activity> GetAllUser(string responsible);
+      IEnumerable<Activity> GetAllProject(Guid projectId);
       Activity Find(Guid Id);
       void Remove(Guid Id);
       void Update([FromBody] Activity activity);

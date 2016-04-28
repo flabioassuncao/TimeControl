@@ -55,7 +55,11 @@ namespace TimeControl
             
             //using Dependency Injection
             services.AddSingleton<IActivityRepository, ActivityRepository>();
+            services.AddSingleton<IProjectRepository, ProjectRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddTransient<IActivityService, ActivityService>();
+            services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

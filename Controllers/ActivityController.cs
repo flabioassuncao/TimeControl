@@ -30,6 +30,15 @@ namespace TimeControl.Controllers
             return _activityService.GetAllUser(user);
         }
         
+        [HttpGet]
+        [Route("GetAllProject/{projectId}")]
+        public IEnumerable<Activity>GetAllProject(Guid projectId)
+        {            
+            Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>CONTROLLER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            Console.WriteLine(projectId);
+            return _activityService.GetAllProject(projectId);
+        }
+        
         
         [HttpGet("{id}", Name = "GetActivity")]
         public IActionResult GetById(Guid Id)

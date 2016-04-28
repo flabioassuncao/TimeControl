@@ -38,6 +38,13 @@ namespace TimeControl.Service.Application
             return _activityRepository.GetAll();
         }
 
+        public IEnumerable<Activity> GetAllProject(Guid projectId)
+        {
+            Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>SERVICE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            Console.WriteLine(projectId);
+            return _activityRepository.GetAllProject(projectId);
+        }
+
         public IEnumerable<Activity> GetAllUser(string responsible)
         {
             return _activityRepository.GetAllUser(responsible);

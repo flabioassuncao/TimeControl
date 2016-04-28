@@ -20,6 +20,16 @@ angular.module("timeControl").config(function ($routeProvider) {
 		controller: "registerController"
     });
     
+    $routeProvider.when("/activities-for-projects", {
+		templateUrl: "js/views/activities-for-projects.html",
+		controller: "activitiesForProjectsController"
+    });
+    
+    $routeProvider.when("/my-projects", {
+		templateUrl: "js/views/my-projects.html",
+		controller: "myProjectsController"
+    });
+    
     $routeProvider.otherwise(
     { 
         redirectTo: '/timer' 

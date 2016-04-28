@@ -12,6 +12,7 @@ namespace Infra.Map
            entityBuilder.Property(x => x.Link).IsRequired();
            
            entityBuilder.HasMany(x => x.Times).WithOne(x => x.Activity).OnDelete(DeleteBehavior.Restrict);       
+           entityBuilder.HasOne(x => x.Project).WithMany(x => x.Activities).OnDelete(DeleteBehavior.Restrict);
        }
    }
 }

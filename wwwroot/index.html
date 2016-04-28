@@ -52,6 +52,8 @@
                             <li ng-hide="authentication.isAuth"><a href="#/register">Sing Up</a></li>
                             <li ng-hide="!authentication.isAuth"><a href="#/timer">Timer</a></li>
                             <li ng-hide="!authentication.isAuth"><a href="#/activities">Activities</a></li>
+                            <li ng-hide="!authentication.isAuth"><a href="#/activities-for-projects">Activities for projects</a></li>
+                            <li ng-hide="!authentication.isAuth"><a href="#/my-projects">My projects</a></li>
                             <li ng-model="user" ng-hide="!authentication.isAuth"><a href="#/timer">{{authentication.userName}}</a></li>
                             <li ng-hide="!authentication.isAuth"><a href="#/" ng-click="logOut()">Logout</a></li>
                         </ul>
@@ -69,6 +71,8 @@
     <script src="assets/components/angular-local-storage/dist/angular-local-storage.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers/indexController.js"></script>
+    <script src="js/controllers/activitiesForProjectsController.js"></script>
+    <script src="js/controllers/myProjectsController.js"></script>
     <script src="js/controllers/loginController.js"></script>
     <script src="js/controllers/activitiesController.js"></script>
     <script src="js/controllers/registerController.js"></script>

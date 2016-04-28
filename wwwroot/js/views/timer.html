@@ -7,7 +7,8 @@
                     <p class="sub animateme fittext3 animated fadeIn"> Control the time you devote to your project </p>
                     <div ng-show="!divStart" class="row search-row animated animated lightSpeedIn">
                         <form name="userForm">
-                            <div class="col-lg-8 col-sm-8 search-col relative locationicon">
+                            
+                            <div class="col-lg-5 col-sm-5 search-col relative locationicon">
                                 <!--<input type="text" name="country" id="link" class="form-control locinput input-rel searchtag-input" placeholder="What are you working on?" ng-model="activity.Link" required>-->
                                 <md-autocomplete ng-disabled="isDisabled" md-no-cache="noCache" md-selected-item="selectedItem" md-search-text-change="searchTextChange(searchText)" md-search-text="searchText" md-selected-item-change="selectedItemChange(item)" md-items="item in querySearch(searchText)" md-item-text="item.Link" md-min-length="0" placeholder="What are you working on?" required  >
                                     <md-item-template>
@@ -18,10 +19,16 @@
                                     </md-not-found>
                                 </md-autocomplete>
                             </div>
+                            <div class="col-lg-3 col-sm-3 search-col">
+                                <select class="form-control" ng-model="project.ProjectId" ng-options="item.ProjectId as item.ProjectName for item in project"></select>
+                                
+                            </div>
                             <div class="col-lg-4 col-sm-4 search-col">
-                                <button ng-click="createActivity(activity);takeAction();valueStartDate();HideStart()" type="submit" class="btn btn-primary btn-search btn-block" ng-disabled="userForm.$invalid"><strong>Start</strong></button>
+                                <button ng-click="createActivity(activity, project.ProjectId);takeAction();valueStartDate();HideStart()" type="submit" class="btn btn-primary btn-search btn-block" ng-disabled="userForm.$invalid"><strong>Start</strong></button>
                             </div>
                         </form>
+                        <button ng-click="testeProje()" class="btn btn-primary btn-search btn-block"><strong>teste</strong></button>
+                        <button ng-click="nameUsers()" class="btn btn-primary btn-search btn-block" data-toggle="modal" data-target="#myModal"><strong>create proj</strong></button>
                     </div>
                 </div>
             </div>
@@ -53,7 +60,6 @@
             </div>
         </div>
         <br>
-        
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 page-content col-thin-right">
@@ -62,20 +68,19 @@
                         <div class="table-responsive">
                             <table id="addManageTable" class="table table-striped table-bordered add-manage-table table demo" data-filter="#filter" data-filter-text-only="true" ng-show="activities.length > 0">
                                 <thead>
-                                    <tr>
-                                        <th> Task </th>
-                                        <th> Actions </th>
-                                    </tr>
                                 </thead>
                                 <tbody ng-repeat="activity in act = (activities) | orderBy: '-LastTimeWorked' | limitTo:3  ">
-                                        <td id="colActivityLink" class="add-img-td">
+                                    <td id="colActivityLink" class="add-img-td">
                                             <div ng-bind-html="SkipValidation((activity.Link | formatLink))">  </div> 
-                                        </td>
-                                        <td id="colActivityActions" class="action-td">
-                                            <div>
-                                                <a ng-click="ContinueActivity(activity)" class="colorlink fa fa-play fa"> </a>&nbsp
-                                            </div>
-                                        </td>
+                                    </td>
+                                    <td id="colActivityObservation" class="ads-details-td">
+								        <div>
+										  <p> {{activity.Observation}} </p>
+										</div>
+									</td>
+                                    <td id="colActivityActions" class="action-td">
+                                        <a ng-click="ContinueActivity(activity)" class="colorlink fa fa-play fa"> </a>&nbsp
+                                    </td>
                                 </tbody>
                             </table>
                         </div>
@@ -83,9 +88,38 @@
                 </div>
             </div>
         </div>
-        
-        
     </div> 
+    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group col-xs-3">
+            <label class="item item-input">Name project: </label> 
+            <input placeholder="Search by activity"  class="form-control" id="" ng-model="nameProject"  type="text" id="" >
+          </div>
+          <div class="form-group col-xs-3">
+            <label class="item item-input">Users: </label> 
+            <select class="form-control" ng-model="users.UserId" ng-options="item.UserId as item.UserName for item in users"></select>
+          </div>
+          <div class="form-group col-xs-3">
+              <button ng-click="AttachUser(users.UserId)" class="btn btn-primary btn-search btn-block" data-toggle="modal" data-target="#myModal"><strong>vincular User</strong></button>
+          </div>
+          <button ng-click="createProject(nameProject)" class="btn btn-primary btn-search btn-block" data-toggle="modal" data-target="#myModal"><strong>create proj</strong></button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
 </div>
 
 

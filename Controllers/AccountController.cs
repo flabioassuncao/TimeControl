@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
@@ -60,7 +61,11 @@ namespace TimeControl.Controllers
                     if (!result.Succeeded)
                         throw new Exception("Could not make the Sign. Verify that the information provided is correct.");          
                     
-                    return new HttpOkObjectResult(returnUrl);                    
+                    return new HttpOkObjectResult(returnUrl);
+                    // Console.WriteLine("==================================================================================");
+                    // Console.WriteLine(User.Identity.Name);
+                    // Console.WriteLine(User.GetUserId());
+                    // return Ok();                    
                 }
                 catch (System.Exception e)
                 {

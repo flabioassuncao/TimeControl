@@ -8,9 +8,10 @@ using Infra.Data.Context;
 namespace TimeControl.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20160422171049_TableProject")]
+    partial class TableProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
@@ -109,7 +110,9 @@ namespace TimeControl.Migrations
 
                     b.Property<string>("Observation");
 
-                    b.Property<Guid>("ProjectId");
+                    b.Property<Guid?>("ProjectProjectId");
+
+                    b.Property<string>("Responsible");
 
                     b.Property<Guid>("ResponsibleId");
 
@@ -168,19 +171,22 @@ namespace TimeControl.Migrations
 
             modelBuilder.Entity("TimeControl.Models.BelongToProject", b =>
                 {
-                    b.Property<Guid>("ProjectId");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("MemberId");
 
-                    b.HasKey("ProjectId", "MemberId");
+                    b.Property<string>("MemberId1");
+
+                    b.Property<Guid>("ProjectId");
+
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("TimeControl.Models.Project", b =>
                 {
                     b.Property<Guid>("ProjectId")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("AdministratorId");
 
                     b.Property<string>("ProjectName")
                         .IsRequired();
@@ -206,17 +212,6 @@ namespace TimeControl.Migrations
                     b.HasKey("TimeId");
                 });
 
-            modelBuilder.Entity("TimeControl.Models.User", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("UserName")
-                        .IsRequired();
-
-                    b.HasKey("UserId");
-                });
-
             modelBuilder.Entity("TimeControl.Models.UsersProjects", b =>
                 {
                     b.Property<Guid>("Id")
@@ -224,9 +219,7 @@ namespace TimeControl.Migrations
 
                     b.Property<Guid>("AdministratorId");
 
-                    b.Property<Guid?>("BelongToProjectMemberId");
-
-                    b.Property<Guid?>("BelongToProjectProjectId");
+                    b.Property<string>("AdministratorId1");
 
                     b.Property<Guid>("ProjectId");
 
@@ -269,29 +262,18 @@ namespace TimeControl.Migrations
                 {
                     b.HasOne("TimeControl.Models.Project")
                         .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("TimeControl.Models.User")
-                        .WithMany()
-                        .HasForeignKey("ResponsibleId");
+                        .HasForeignKey("ProjectProjectId");
                 });
 
             modelBuilder.Entity("TimeControl.Models.BelongToProject", b =>
                 {
-                    b.HasOne("TimeControl.Models.User")
+                    b.HasOne("TimeControl.Models.ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("MemberId");
+                        .HasForeignKey("MemberId1");
 
-                    b.HasOne("TimeControl.Models.Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-                });
-
-            modelBuilder.Entity("TimeControl.Models.Project", b =>
-                {
-                    b.HasOne("TimeControl.Models.User")
-                        .WithMany()
-                        .HasForeignKey("AdministratorId");
+                    b.HasOne("TimeControl.Models.UsersProjects")
+                        .WithOne()
+                        .HasForeignKey("TimeControl.Models.BelongToProject", "ProjectId");
                 });
 
             modelBuilder.Entity("TimeControl.Models.Time", b =>
@@ -303,17 +285,13 @@ namespace TimeControl.Migrations
 
             modelBuilder.Entity("TimeControl.Models.UsersProjects", b =>
                 {
-                    b.HasOne("TimeControl.Models.User")
-                        .WithMany()
-                        .HasForeignKey("AdministratorId");
+                    b.HasOne("TimeControl.Models.ApplicationUser")
+                        .WithOne()
+                        .HasForeignKey("TimeControl.Models.UsersProjects", "AdministratorId1");
 
                     b.HasOne("TimeControl.Models.Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("TimeControl.Models.BelongToProject")
-                        .WithMany()
-                        .HasForeignKey("BelongToProjectProjectId", "BelongToProjectMemberId");
+                        .WithOne()
+                        .HasForeignKey("TimeControl.Models.UsersProjects", "ProjectId");
                 });
         }
     }

@@ -19,6 +19,7 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
 	};
     
     var _updateActivity = function (Activity) {
+        console.log(Activity);
 		return $http.put(config.baseUrl + "/Activity", Activity);
 	};
     
@@ -105,6 +106,28 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
        localStorageService.set('continueActivity', { Link: Activity.Link, Observation: Activity.Observation});
     }
     
+    var _getNameProjects = function(){
+        return $http.get(config.baseUrl + "/Project");
+        // return $http.get(config.baseUrl + "/Project/GetAllProjects");
+    }
+    
+    var _saveProject = function(project){
+        return $http.post(config.baseUrl + "/Project", project);
+    }
+    
+    var _getNameUsers = function(){
+        return $http.get(config.baseUrl + "/User/GetAllUsers");
+    }
+    
+    var _getBelongProject = function(projectId){
+        return $http.get(config.baseUrl + "/User/GetAllBelongProject/" + projectId);
+    }
+    
+    var _saveBelongProject = function(IdProjectAndUser){
+        
+        return $http.post(config.baseUrl + "/Project/SaveBelong", IdProjectAndUser);
+    }
+    
 	return {
 		getActivity: _getActivity,
 		saveActivity: _saveActivity,
@@ -123,6 +146,11 @@ angular.module("timeControl").factory("activityAPI", function ($http, config, $q
         recuperarIdTime: _restoreIdTime,
         deleteTime: _deleteTime,
         getActivityUser: _getActivityUser,
-        getActivityId: _getActivityId
+        getActivityId: _getActivityId,
+        getNameProjects: _getNameProjects,
+        saveProject: _saveProject,
+        getNameUsers: _getNameUsers,
+        getBelongProject: _getBelongProject,
+        saveBelongProject: _saveBelongProject
 	};
 });

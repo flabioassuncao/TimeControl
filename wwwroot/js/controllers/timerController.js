@@ -6,6 +6,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
     $scope.activity = {};
     $scope.tagRestart = false;
     
+    
     $scope.timeTotal = function(){
         var total = "00:00:00";
         for(var i = 0; i < $scope.act.length; i++){
@@ -67,9 +68,44 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
         $scope.StartDate = moment().format(); 
     }
     
-    $scope.createActivity = function(activity){
+    $scope.testeProje = function () {
+        activityAPI.getNameProjects().success(function (data) {
+            $scope.project = data;
+        });
+    }
+    
+    $scope.nameUsers = function(){
+        activityAPI.getNameUsers().success(function (data) {
+            $scope.users = data;
+        });
+    }
+    
+    $scope.createProject = function(nameProject){
+        var project = {};
+        project.ProjectName = nameProject;
+        project.AdministratorId = "fe384930-b71a-4013-9694-1f48bc436fb0";
+        activityAPI.saveProject(project).success(function (data) {
+            console.log(data.ProjectId);
+            localStorageService.set('idProject', { lastIdProject: data.ProjectId});
+		});
+    }
+    
+    $scope.AttachUser = function(userID) {
+        var Ids = {};
+        Ids.MemberId = userID;
+        var authData = localStorageService.get('idProject');
+        Ids.ProjectId = authData.lastIdProject;
+        
+        activityAPI.saveBelongProject(Ids).success(function (data) {
+            console.log('ok');            
+        });
+    }
+    
+    $scope.createActivity = function(activity, proj){
+        activity.ResponsibleId = "fe384930-b71a-4013-9694-1f48bc436fb0";
+        activity.ProjectId = proj   ;
         activity.Link = $scope.searchText;
-        activity.Responsible = activityAPI.authentication.userName;
+        // activity.Responsible = activityAPI.authentication.userName;  PASSAR O ID DO USER
         activityAPI.saveActivity(activity).success(function (data) {
             var time = {};
             time.StartDate = $scope.StartDate;
@@ -89,10 +125,14 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
     
     $scope.updateActivity = function(activity)
     {
-        activity.ActivityId = activityAPI.recuperarIdActivity();
+        var help = {};
+        help.Observation = activity.Observation;
+        help.Link = activity.Link;
+        // help.Link = activity.Link; 
+        help.ActivityId = activityAPI.recuperarIdActivity();
         activity.Responsible = activityAPI.authentication.userName;
-        activity.LastTimeWorked = moment().format();
-        activityAPI.updateActivity(activity).success(function (data) {
+        help.LastTimeWorked = moment().format();
+        activityAPI.updateActivity(help).success(function (data) {
             updateTime();  
 			$scope.activity = {};
             $scope.Duration = '00H 00M 00S';
@@ -114,6 +154,8 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
         });
     }
     
+    
+    
     var atividadeAberta = function (){
         var user = activityAPI.authentication.userName;
         if(user){
@@ -125,7 +167,7 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
                 if(authData){
                     for(item in objts){
                         for(obj in objts[item].Times){
-                            if(objts[item].Times[obj].Status == false && objts[item].Responsible == authData.userName){
+                            if(objts[item].Times[obj].Status == false && objts[item].Responsible.UserName == "Flabio"){
                                 timer = objts[item].Times[obj];
                                 resul = objts[item];
                             }
@@ -270,6 +312,8 @@ angular.module("timeControl").controller("timerController", function ($scope, $l
 		}).error(function (data, status) {
 		});
     }
+    
+    
     
     activityAPI.checkAuthentication();
     atividadeAberta();

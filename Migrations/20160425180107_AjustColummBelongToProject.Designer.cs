@@ -8,9 +8,10 @@ using Infra.Data.Context;
 namespace TimeControl.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20160425180107_AjustColummBelongToProject")]
+    partial class AjustColummBelongToProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
@@ -110,6 +111,8 @@ namespace TimeControl.Migrations
                     b.Property<string>("Observation");
 
                     b.Property<Guid>("ProjectId");
+
+                    b.Property<string>("Responsible");
 
                     b.Property<Guid>("ResponsibleId");
 
@@ -270,10 +273,6 @@ namespace TimeControl.Migrations
                     b.HasOne("TimeControl.Models.Project")
                         .WithMany()
                         .HasForeignKey("ProjectId");
-
-                    b.HasOne("TimeControl.Models.User")
-                        .WithMany()
-                        .HasForeignKey("ResponsibleId");
                 });
 
             modelBuilder.Entity("TimeControl.Models.BelongToProject", b =>

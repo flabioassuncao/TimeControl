@@ -7,21 +7,18 @@ angular.module("timeControl").provider("functionsForHours", function () {
                 var new_h = 0;
                 var new_m = 0;
                 var new_s = 0;
-        
                 var hour1 = hrA.substr(0, 2) * 1;
                 var hour2 = hrB.substr(0, 2) * 1;
                 var minute1 = hrA.substr(3, 2) * 1;
                 var minute2 = hrB.substr(3, 2) * 1;
                 var second1 = hrA.substr(6, 2) * 1;
                 var second2 = hrB.substr(6, 2) * 1;
-                
                 temp = second1 + second2;
                 while(temp > 59) {
                     new_m++;
                     temp = temp - 60;
                 }
                 new_s = temp.toString().length == 2? temp : ("0" + temp);
-            
                 temp = minute1 + minute2 + new_m;
                 while(temp > 59) {
                         new_h++;
@@ -34,10 +31,8 @@ angular.module("timeControl").provider("functionsForHours", function () {
                         temp = temp - 24;
                 }
                 new_h = temp.toString().length == 2 ? temp : ("0" + temp);
-        
                 return new_h + ':' + new_m + ':' + new_s;
 			},
-            
             
             transformingSeconds: function (seconds){
                 
@@ -79,7 +74,6 @@ angular.module("timeControl").provider("functionsForHours", function () {
                 var s = x.seconds().toString().length == 2? x.seconds() : ("0" + x.seconds());
                 return h + "H " + m + "M " + s + "S";
             }
-
 		};
 	};
 });

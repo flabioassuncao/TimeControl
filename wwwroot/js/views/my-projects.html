@@ -1,0 +1,110 @@
+<div class="intro">
+    <div class="dtable hw100">
+	   <div class="dtable-cell hw100">
+	       <div class="container text-center">
+		      <h1 class="intro-title animated fadeInDown"> TIME CONTROL </h1>
+			  <p class="sub animateme fittext3 animated fadeIn"> Control the time you devote to your project </p>
+		   </div>
+        </div>
+    </div>
+</div>
+<div class="main-container" ng-cloak>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 page-content col-thin-right">
+				<div class="inner-box category-content">
+					<h2 class="title-2"> My projects </h2>
+					<div class="table-responsive">
+						<div class="table-action">
+                            <div class="row">
+                                <div class="form-inline">
+                                    <div class="table-search pull-right col-xs-12">
+                                        <a href="" data-toggle="modal" data-target="#myModal">Create a new project</a>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+						<div class="row" ng-repeat-start="u in users" ng-click="showDetail(u)" ng-class-odd="'alt'">
+                            <!--<div class="col-xs-1 text-center"><img title="{{u.ProjectName}}" src="{{u.user.picture}}" class="img-thumbnail img-responsive img-circle"></div> -->
+                            <div class="col-xs-3 cap">{{u.ProjectName}}</div>
+                            <div class="col-xs-2 strong">{{u.user.username}}</div>
+                            <div class="col-xs-2">{{u.user.phone}}</div>
+                            <div class="col-xs-2">{{u.user.location.state}}</div> 
+                            <div class="col-xs-2 text-right"><a href=""><i ng-hide="active==u.ProjectName" class="fa fa-plus fa-2x"></i><i ng-show="active==u.ProjectName" class="fa fa-minus fa-2x"></i></a></div>
+                        </div>
+                        <div class="row" ng-repeat-end="" ng-show="active==u.ProjectName" ng-class-odd="'alt'">
+                            <div class="col-xs-12"><h2 class="cap">{{u.ProjectName}} <i ng-show="u.user.gender=='female'" class="fa fa-female"></i><i ng-show="u.user.gender=='male'" class="fa fa-male"></i></h2></div>
+                            <div class="col-md-3 col-xs-6 small">
+                                <label>Adm</label> {{u.Administrator.UserName}}<br>
+                                <!--<label>Registered</label> {{u.user.registered | date:'MM/dd/yyyy'}}<br>
+                                <label>Email</label> {{u.user.email}}-->
+                            </div>
+                            <div class="col-md-3 col-xs-6 small" >
+                                <label>Members</label>
+                                <div ng-repeat="belo in u.BelongToProject">
+                                    {{belo.Member.UserName}} &nbsp&nbsp
+                                    <a ng-click="" class="colorlink fa fa-times fa">&nbspRemove</a>
+                                </div>
+                                <a ng-click="getOptions2();addUser()" class="colorlink fa fa-plus fa">&nbspAdd member</a>
+                                <!--<div>
+                                        <input id="inputdefault" class="form-control" type="text">
+                                    </div>-->
+                                <!--<div class="form-group">
+                                        <input class="form-control input-sm" id="inputsm" type="text">
+                                    </div>-->
+                                    <div ng-show="divUsers" class="form-group">
+                                        <select class="form-control" ng-model="members.UserId" ng-options="item.UserId as item.UserName for item in members" data-ng-change="addUserToProject(members.UserId, u.ProjectId )">
+                                            <option value="">Select to member</option>
+                                        </select>
+                                    </div>
+                                <!--<label>Address</label> {{u.user.location.street}}<br>
+                                    <label>City</label> {{u.user.location.city}}<br>
+                                    <label>Zip Code</label> {{u.user.location.zip}}<br>-->
+                                <!--<label>Members</label>{{belo.Member.UserName}}<br>-->
+                            </div>
+                        <!--<div class="col-md-3 col-xs-6 small">
+                                <label>Birthday</label> {{u.user.dob | date:'MM/dd/yyyy'}}<br>
+                                <label>Phone</label> {{u.user.phone}}<br>
+                                <label>Cell</label> {{u.user.cell}}<br>
+                            </div>-->
+                        <!--<div class="col-md-2 col-xs-12 text-center">
+                                <img title="{{u.user.name.first}}" src="{{u.user.picture}}" class="img-thumbnail img-responsive img-circle center-block">
+                            </div>-->
+                            <div class="col-xs-12"><hr></div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Creating a new project</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group col-xs-4" >
+                    <label class="item item-input">Name project: </label> 
+                    <input placeholder="The new project name"  class="form-control" id="" ng-model="nameProject"  type="text" id="" ng-readonly="txtNameProj">
+                </div>
+                <div class="form-group col-xs-4" ng-show="divAddMember">
+                    <label class="item item-input">Users: </label> 
+                    <select class="form-control" ng-model="members.UserId" ng-options="item.UserId as item.UserName for item in members" data-ng-change="AttachUser(members.UserId)"></select>
+                </div>
+                <div class="form-group col-xs-4">
+                    {{message}}
+                </div>
+                <button ng-click="createProject(nameProject)" class="btn btn-primary btn-search btn-block"><strong>create proj</strong></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+      </div>
+    </div>
+</div>

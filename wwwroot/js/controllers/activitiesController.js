@@ -22,6 +22,12 @@ angular.module("timeControl").controller("activitiesController", function ($scop
         $scope.search = false;
     }
    
+   $scope.testeProje = function () {
+        activityAPI.getNameProjects().success(function (data) {
+            $scope.project = data;
+        });
+    }
+   
    var loadActivity = function () {
         var user = activityAPI.authentication.userName;
         if(user){
