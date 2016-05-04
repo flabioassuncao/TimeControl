@@ -13,8 +13,6 @@ namespace Infra.Map
            
            entityBuilder.HasMany(x => x.ListProjectsAdmin).WithOne(x => x.Administrator).OnDelete(DeleteBehavior.Restrict);
            entityBuilder.HasMany(x => x.Activities).WithOne(x => x.Responsible).OnDelete(DeleteBehavior.Restrict);
-        //    entityBuilder.HasOne(x => x.BelongToProject).WithOne(x => x.Member).HasForeignKey<BelongToProject>(x => x.MemberId);
-        //    entityBuilder.HasMany(x => x.ListProjectsAdmin).WithOne(x => x.Administrator).OnDelete(DeleteBehavior.Restrict);
        }
    }
 }

@@ -21,12 +21,12 @@
                                     <div class="table-search pull-right col-xs-12">
                                         <div class="form-group">
                                             <div class="form-group">
-                                                <label class="col-xs-12 control-label text-right">Search <a ng-click="searchName();testeProje()" class="colorlink fa fa-search"></a> <br></label>
+                                                <label class="col-xs-12 control-label text-right">Search <a ng-click="searchName();" class="colorlink fa fa-search"></a> <br></label>
                                             </div>
                                             <div ng-show="search">
                                                 <div class="form-group col-xs-3">
                                                     <label class="item item-input">Search activity: </label> 
-                                                    <input placeholder="Search by activity"  class="form-control" id="" ng-model="criterioDeBusca"  type="text" id="" >
+                                                    <input placeholder="Search by activity"  class="form-control" id="" ng-model="searchCriteria"  type="text" id="" >
                                                 </div>
                                                 <div class="form-group col-xs-3">
                                                     <label class="item item-input">Initial Date: </label> 
@@ -51,8 +51,8 @@
                                             <div class="form-group">
                                                 <div class="navbar-collapse collapse">
                                                     <ul class="nav navbar-nav navbar-right">
-                                                        <li ng-repeat="todo in todos">
-                                                            <i class="icon-ok" ng-show="todo.done" /><span ng-click="toggleState($index)" ng-class="isDone($index)">{{todo.desc}}</span> 
+                                                        <li ng-repeat="todo in todos" style="background-color: #149078; color: #FFFFFF; border-radius:5px;">
+                                                            <i class="icon-ok" ng-show="todo.done" /><span ng-click="toggleState($index)" ng-class="isDone($index)" >{{todo.desc}}</span> 
                                                             <i class="fa-times fa" ng-click="removeTodo($index)" />
                                                         </li>
                                                     </ul>
@@ -72,11 +72,11 @@
 								   <th> Duration </th>
 								 </tr>
 							</thead>
-							<tbody ng-repeat="activity in act = (activities | filter:{Link:criterioDeBusca} | filter:{ProjectId:project.ProjectId} )   ">
+							<tbody ng-repeat="activity in act = (activities | filter:{Link:searchCriteria} | filter:{ProjectId:project.ProjectId})">
 							    <tr ng-repeat="time in times = (activity.Times | filter:{Status:true} | betweenDate:'StartDate':initialDate:finalDate)" >
                                     <td id="colActivityActions" class="action-td">
                                         <div class="dropdown">
-                                            <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">
+                                            <button class="btn btn-link" type="button" data-toggle="dropdown">
                                             <span class="caret"></span></button>
                                             <ul class="dropdown-menu">
                                             <li><a ng-click="DeleteTime(time.TimeId)" class="colorlink fa fa-trash fa">&nbspDelete</a></li>

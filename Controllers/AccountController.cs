@@ -43,7 +43,6 @@ namespace TimeControl.Controllers
                     ModelState.AddModelError("Error", e.Message);                   
                 }
            }
-            
             return HttpBadRequest("Password must contain numbers, special characters, uppercase and lowercase");
         }
  
@@ -61,11 +60,7 @@ namespace TimeControl.Controllers
                     if (!result.Succeeded)
                         throw new Exception("Could not make the Sign. Verify that the information provided is correct.");          
                     
-                    return new HttpOkObjectResult(returnUrl);
-                    // Console.WriteLine("==================================================================================");
-                    // Console.WriteLine(User.Identity.Name);
-                    // Console.WriteLine(User.GetUserId());
-                    // return Ok();                    
+                    return new HttpOkObjectResult(returnUrl);          
                 }
                 catch (System.Exception e)
                 {
@@ -89,6 +84,5 @@ namespace TimeControl.Controllers
                return HttpBadRequest();                
             } 
         }
-        
     }
 }

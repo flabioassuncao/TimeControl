@@ -18,60 +18,40 @@
 						<div class="table-action">
                             <div class="row">
                                 <div class="form-inline">
-                                    <div class="table-search pull-right col-xs-12">
+                                    <div class="add-img-td table-search pull-right col-xs-12">
                                         <a href="" data-toggle="modal" data-target="#myModal">Create a new project</a>
                                     </div>
                                 </div>
                             </div>
 						</div>
 						<div class="row" ng-repeat-start="u in users" ng-click="showDetail(u)" ng-class-odd="'alt'">
-                            <!--<div class="col-xs-1 text-center"><img title="{{u.ProjectName}}" src="{{u.user.picture}}" class="img-thumbnail img-responsive img-circle"></div> -->
-                            <div class="col-xs-3 cap">{{u.ProjectName}}</div>
-                            <div class="col-xs-2 strong">{{u.user.username}}</div>
-                            <div class="col-xs-2">{{u.user.phone}}</div>
-                            <div class="col-xs-2">{{u.user.location.state}}</div> 
-                            <div class="col-xs-2 text-right"><a href=""><i ng-hide="active==u.ProjectName" class="fa fa-plus fa-2x"></i><i ng-show="active==u.ProjectName" class="fa fa-minus fa-2x"></i></a></div>
+                            <div class="col-xs-1 text-left"><i ng-hide="active==u.ProjectName" class="fa fa-plus-square-o fa-2x"></i><i ng-show="active==u.ProjectName" class="fa fa-minus-square-o fa-2x"></i></div>
+                            <div class="col-xs-2 text-left"><i ng-hide="active==u.ProjectName" ></i><i ng-show="active==u.ProjectName" ></i>&nbsp&nbsp{{u.ProjectName}}</div>
                         </div>
                         <div class="row" ng-repeat-end="" ng-show="active==u.ProjectName" ng-class-odd="'alt'">
-                            <div class="col-xs-12"><h2 class="cap">{{u.ProjectName}} <i ng-show="u.user.gender=='female'" class="fa fa-female"></i><i ng-show="u.user.gender=='male'" class="fa fa-male"></i></h2></div>
+                            <div class="col-xs-12"><h2 class="cap">{{u.ProjectName}}</i></h2></div>
                             <div class="col-md-3 col-xs-6 small">
                                 <label>Adm</label> {{u.Administrator.UserName}}<br>
-                                <!--<label>Registered</label> {{u.user.registered | date:'MM/dd/yyyy'}}<br>
-                                <label>Email</label> {{u.user.email}}-->
                             </div>
                             <div class="col-md-3 col-xs-6 small" >
                                 <label>Members</label>
-                                <div ng-repeat="belo in u.BelongToProject">
-                                    {{belo.Member.UserName}} &nbsp&nbsp
-                                    <a ng-click="" class="colorlink fa fa-times fa">&nbspRemove</a>
+                                <div ng-repeat="belo in BelongToProject">
+                                    {{belo.UserName}} &nbsp&nbsp
+                                    <a ng-click="removerUserProject(belo.UserId, u.ProjectId)" class="colorlink fa fa-times fa">&nbspRemove</a>
                                 </div>
-                                <a ng-click="getOptions2();addUser()" class="colorlink fa fa-plus fa">&nbspAdd member</a>
-                                <!--<div>
-                                        <input id="inputdefault" class="form-control" type="text">
-                                    </div>-->
-                                <!--<div class="form-group">
-                                        <input class="form-control input-sm" id="inputsm" type="text">
-                                    </div>-->
-                                    <div ng-show="divUsers" class="form-group">
-                                        <select class="form-control" ng-model="members.UserId" ng-options="item.UserId as item.UserName for item in members" data-ng-change="addUserToProject(members.UserId, u.ProjectId )">
-                                            <option value="">Select to member</option>
-                                        </select>
-                                    </div>
-                                <!--<label>Address</label> {{u.user.location.street}}<br>
-                                    <label>City</label> {{u.user.location.city}}<br>
-                                    <label>Zip Code</label> {{u.user.location.zip}}<br>-->
-                                <!--<label>Members</label>{{belo.Member.UserName}}<br>-->
+                                <a ng-click="divUsers?divUsers=false:divUsers=true" class="colorlink fa fa-plus fa">&nbspAdd member</a>
+                                <div ng-show="divUsers" class="form-group">
+                                    <select class="form-control" ng-model="members.UserId" ng-options="item.UserId as item.UserName for item in members" data-ng-change="addUserToProject(members.UserId, u.ProjectId )">
+                                        <option value="">Select to member</option>
+                                    </select>
+                                </div>
                             </div>
-                        <!--<div class="col-md-3 col-xs-6 small">
-                                <label>Birthday</label> {{u.user.dob | date:'MM/dd/yyyy'}}<br>
-                                <label>Phone</label> {{u.user.phone}}<br>
-                                <label>Cell</label> {{u.user.cell}}<br>
-                            </div>-->
-                        <!--<div class="col-md-2 col-xs-12 text-center">
-                                <img title="{{u.user.name.first}}" src="{{u.user.picture}}" class="img-thumbnail img-responsive img-circle center-block">
-                            </div>-->
+                            <div class="col-md-3 col-xs-6 small">
+                                {{messageAdd}}
+                            </div>
                             <div class="col-xs-12"><hr></div>
                         </div>
+                        <br>
 					</div>
 				</div>
 			</div>
@@ -103,7 +83,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
       </div>
     </div>

@@ -18,17 +18,11 @@ namespace TimeControl.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<Project>GetAll()
+        [Route("GetAll/{userId}")]
+        public IEnumerable<Project>GetAll(Guid userId)
         {            
-            return _projectService.GetAll();
+            return _projectService.GetAll(userId);
         }
-        
-        // [HttpGet]
-        // [Route("GetAllUser/{user}")]
-        // public IEnumerable<Project>GetAllUser(string user)
-        // {            
-        //     return _projectService.GetAllUser(user);
-        // }
         
         [HttpGet("{id}", Name = "GetProject")]
         public IActionResult GetById(Guid Id)
@@ -37,10 +31,10 @@ namespace TimeControl.Controllers
         }
         
         [HttpGet]
-        [Route("GetAllProjects")]
-        public IEnumerable<Project>GetAllUser()
+        [Route("GetAllNamesProjects/{userId}")]
+        public IEnumerable<Project>GetAllNamesProjects(Guid UserId)
         {            
-            return _projectService.GetAllNames();
+            return _projectService.GetAllNamesProjects(UserId);
         }
         
         [HttpPost]
@@ -63,9 +57,28 @@ namespace TimeControl.Controllers
         
         [HttpPost]
         [Route("SaveBelong")]
-        public void AddBelongProject([FromBody]BelongToProject proj)
+        public IActionResult AddBelongProject([FromBody]BelongToProject proj)
         {
-            _projectService.AddBelongTable(proj);    
+            var operatingResult = _projectService.AddBelongTable(proj);
+            if(operatingResult)
+                return Ok();
+             else
+                return HttpBadRequest();
         }
+        
+        [HttpPost]
+        [Route("DeleteBelong")]
+        public void DeleteBelongProject([FromBody]BelongToProject Ids)
+        {
+            _projectService.DeleteBelongTable(Ids);    
+        }
+        
+        [HttpGet]
+        [Route("GetProjectsParticipating/{userId}")]
+        public IEnumerable<Project>GetProjectsParticipating(Guid userId)
+        {
+            return _projectService.GetProjectsParticipating(userId);
+        }
+        
     }
 }

@@ -24,43 +24,56 @@ namespace TimeControl.Repository
             _context.SaveChanges();
         }
 
-        public void AddBelongTable(BelongToProject ids)
+        public bool AddBelongTable(BelongToProject ids)
         {
-            _context.BelongToProjects.Add(ids);
-            _context.SaveChanges();
+            var entity = _context.BelongToProjects.FirstOrDefault(t => t.MemberId == ids.MemberId && t.ProjectId == ids.ProjectId);
+            if(entity == null){
+                _context.BelongToProjects.Add(ids);
+                _context.SaveChanges();
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        public void DeleteBelongTable(BelongToProject ids)
+        {
+            var entity = _context.BelongToProjects.FirstOrDefault(t => t.MemberId == ids.MemberId && t.ProjectId == ids.ProjectId);
+            if(entity != null){
+                _context.BelongToProjects.Remove(entity);
+                _context.SaveChanges();
+            }
         }
 
         public Project Find(Guid Id)
         {
-            return _context.Projects
+            return _context.Projects.AsNoTracking()
                     .Include(a => a.Activities)
                     .FirstOrDefault(a => a.ProjectId.Equals(Id));
         }
 
-        public IEnumerable<Project> GetAll()
+        public IEnumerable<Project> GetAll(Guid userId)
         {
-            return _context.Projects
+            return _context.Projects.AsNoTracking()
                     .Include(a => a.Activities)
                     .ThenInclude(a => a.Times)
                     .Include(a => a.BelongToProject)
                     .ThenInclude(a => a.Member)
                     .Include(a => a.Administrator)
-                    .Where(a =>a.Administrator.UserId == Guid.Parse("fe384930-b71a-4013-9694-1f48bc436fb0"));
+                    .Where(a =>a.Administrator.UserId == userId);
         }
 
-        public IEnumerable<Project> GetAllNames()
+        public IEnumerable<Project> GetAllNamesProjects(Guid UserId)
         {
-            return _context.Projects;
+            return _context.Projects.AsNoTracking()
+                    .Where(x => x.AdministratorId == UserId);
         }
 
-
-        // public IEnumerable<Project> GetAllUser(Project administrator)
-        // {
-        //     return _context.Projects
-        //             .Include(a => a.Activities).Where(r => r.Administrator == administrator.Administrator);
-
-        //             //ATENÇÃO AQUI...
-        // }
+        public IEnumerable<Project> GetProjectsParticipating(Guid userId)
+        {
+            return _context.Projects.AsNoTracking()
+                    .Where(x => x.BelongToProject.Any(c => c.MemberId == userId));
+        }
 
         public void Remove(Guid Id)
         {
@@ -75,8 +88,8 @@ namespace TimeControl.Repository
             if (itemToUpdate != null)
             {
                 itemToUpdate.ProjectName = project.ProjectName;
+                 _context.SaveChanges();
             }
-             _context.SaveChanges();
         }
     }
 }

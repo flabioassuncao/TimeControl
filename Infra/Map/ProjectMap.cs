@@ -12,10 +12,7 @@ namespace Infra.Map
            entityBuilder.Property(x => x.ProjectName).IsRequired();
            
            entityBuilder.HasMany(x => x.Activities).WithOne(x => x.Project).OnDelete(DeleteBehavior.Restrict);
-        //    entityBuilder.HasOne(x => x.UserProject).WithOne(x => x.Project).HasForeignKey<UsersProjects>(x => x.ProjectId);
            entityBuilder.HasOne(x => x.Administrator).WithMany(x => x.ListProjectsAdmin).OnDelete(DeleteBehavior.Restrict);
-        //    entityBuilder.HasMany(x => x.Members).WithOne(x => x.Project).OnDelete(DeleteBehavior.Restrict);
        }
-       
    }
 }

@@ -4,11 +4,13 @@ angular.module("timeControl").controller("loginController", function ($scope, ac
 
     $scope.login = function (loginData) {
         activityAPI.login(loginData).success(function (response) {
-            $location.path('/timer');
+            activityAPI.recuperarIdUser(loginData).success(function (idUser) {
+                localStorageService.set('authorizationData', { userName: loginData.Email, authenticationUser: true, userId: idUser.UserId  });
+                $location.path('/timer');
+            });
         }).error(function (data) {
             $scope.alert = false;
 			$scope.message = data.Error[0];
 		});
     };
-    
 });

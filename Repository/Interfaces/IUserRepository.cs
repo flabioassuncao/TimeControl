@@ -7,12 +7,11 @@ namespace TimeControl.Interfaces.Repository
 {
     public interface IUserRepository
    {
-       void Add(User user);
+      void Add(User user);
       IEnumerable<User> GetAll();
       IEnumerable<User> GetAllNames();
       IEnumerable<User> GetAllBelongProject(Guid projectId);
-      IEnumerable<Project> GetProjectsParticipating(Guid userId);
-      User Find(Guid Id);
+      User Find(string userName);
       void Remove(Guid Id);
       void Update([FromBody] User user);
    }

@@ -9,14 +9,10 @@ namespace TimeControl.Interfaces.Repository
    {
       void Add(Activity activity);
       IEnumerable<Activity> GetAll();
-      IEnumerable<Activity> GetAllUser(string responsible);
+      IEnumerable<Activity> GetAllUser(Guid userId);
       IEnumerable<Activity> GetAllProject(Guid projectId);
       Activity Find(Guid Id);
       void Remove(Guid Id);
       void Update([FromBody] Activity activity);
-      void SaveTime(Time time);
-      void UpdateTime(Time time);
-      void DeleteTime(Guid Id);
-      
    }
 }

@@ -23,9 +23,9 @@ namespace TimeControl.Service.Application
             return user;
         }
 
-        public User Find(Guid Id)
+        public User Find(string userName)
         {
-            return _userRepository.Find(Id);
+            return _userRepository.Find(userName);
         }
 
         public IEnumerable<User> GetAll()
@@ -41,11 +41,6 @@ namespace TimeControl.Service.Application
         public IEnumerable<User> GetAllNames()
         {
             return _userRepository.GetAllNames();
-        }
-
-        public IEnumerable<Project> GetProjectsParticipating(Guid userId)
-        {
-            return _userRepository.GetProjectsParticipating(userId);
         }
 
         public void Remove(Guid Id)

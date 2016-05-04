@@ -23,11 +23,6 @@ namespace TimeControl.Service.Application
             return activity;
         }
 
-        public void DeleteTime(Guid Id)
-        {
-            _activityRepository.DeleteTime(Id);
-        }
-
         public Activity Find(Guid Id)
         {
             return _activityRepository.Find(Id);
@@ -40,14 +35,12 @@ namespace TimeControl.Service.Application
 
         public IEnumerable<Activity> GetAllProject(Guid projectId)
         {
-            Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>SERVICE<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-            Console.WriteLine(projectId);
             return _activityRepository.GetAllProject(projectId);
         }
 
-        public IEnumerable<Activity> GetAllUser(string responsible)
+        public IEnumerable<Activity> GetAllUser(Guid UserId)
         {
-            return _activityRepository.GetAllUser(responsible);
+            return _activityRepository.GetAllUser(UserId);
         }
 
         public void Remove(Guid Id)
@@ -55,21 +48,9 @@ namespace TimeControl.Service.Application
             _activityRepository.Remove(Id);
         }
 
-        public Time SaveTime(Time time)
-        {
-            time.TimeId = Guid.NewGuid();
-            _activityRepository.SaveTime(time);
-            return time;
-        }
-
         public void Update([FromBody]Activity activity)
         {
             _activityRepository.Update(activity);
-        }
-
-        public void UpdateTime(Time time)
-        {
-            _activityRepository.UpdateTime(time);
         }
     }
 }

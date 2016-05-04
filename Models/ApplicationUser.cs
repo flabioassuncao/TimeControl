@@ -4,6 +4,5 @@ namespace TimeControl.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        // public UsersProjects UserProject { get; set; }
     }
 }

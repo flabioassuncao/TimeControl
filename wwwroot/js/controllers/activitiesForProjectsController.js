@@ -7,32 +7,30 @@ angular.module("timeControl").controller("activitiesForProjectsController", func
             $scope.search = true;
     }
     
-    $scope.testeProje = function () {
+    $scope.getNameProjects = function () {
         activityAPI.getNameProjects().success(function (data) {
             $scope.project = data;
         });
     }
     
-    var loadActivity = function () {
-            activityAPI.getActivity().success(function (data) {
-                $scope.activities = data;
-            }).error(function (data, status) {
-            });
-        
+    $scope.loadActivity = function (ProjectId) {
+        activityAPI.getAllActivityByProjectId(ProjectId).success(function (data) {
+            $scope.activities = data;
+        }).error(function (data, status) {  });
 	};
     
     $scope.SkipValidation = function(value) {
         return $sce.trustAsHtml(value);
     };
     
-    $scope.getOptions2 = function(projectId){
-        
+    $scope.getBelongProject = function(projectId){
         activityAPI.getBelongProject(projectId).success(function (data) {
-                $scope.users = data;
-            }).error(function (data, status) {
+            $scope.users = data;
+            activityAPI.getAllActivityByProjectId(projectId).success(function (data) {
+                $scope.activities = data;
             });
+        }).error(function (data, status) { });
     }
     
-    loadActivity();
-    
+    activityAPI.checkAuthentication();
 });

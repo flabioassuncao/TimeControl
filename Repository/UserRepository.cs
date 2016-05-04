@@ -20,24 +20,24 @@ namespace TimeControl.Repository
 
         public void Add(User user)
         {
-             _context.User.Add(user);
+            _context.User.Add(user);
             _context.SaveChanges();
         }
 
-        public User Find(Guid Id)
+        public User Find(string userName)
         {
-            return _context.User
+            return _context.User.AsNoTracking()
                     .Include(a => a.BelongToProject)
                     .ThenInclude(a => a.Member)
                     .Include(a => a.ListProjectsAdmin)
                     .ThenInclude(a => a.Activities)
                     .ThenInclude(a => a.Times)
-                    .FirstOrDefault(a => a.UserId.Equals(Id));
+                    .FirstOrDefault(a => a.UserName.Equals(userName));
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _context.User
+            return _context.User.AsNoTracking()
                     .Include(a => a.BelongToProject)
                     .ThenInclude(a => a.Member)
                     .Include(a => a.ListProjectsAdmin)
@@ -47,19 +47,13 @@ namespace TimeControl.Repository
 
         public IEnumerable<User> GetAllBelongProject(Guid projectId)
         {
-            return _context.User
+            return _context.User.AsNoTracking()
                     .Where(x => x.BelongToProject.Any(c => c.ProjectId == projectId));
         }
 
         public IEnumerable<User> GetAllNames()
         {
-            return _context.User;
-        }
-
-        public IEnumerable<Project> GetProjectsParticipating(Guid userId)
-        {
-            return _context.Projects
-                    .Where(x => x.BelongToProject.Any(c => c.MemberId == userId));
+            return _context.User.AsNoTracking();
         }
 
         public void Remove(Guid Id)

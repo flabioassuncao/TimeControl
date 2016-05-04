@@ -12,9 +12,8 @@ namespace TimeControl.Models
        public DateTime LastTimeWorked { get; set; }
        public IList<Time> Times { get; set; }
        public Guid ResponsibleId { get; set; }
-       public User Responsible { get; set; }
+       public virtual User Responsible { get; set; }
        public Guid ProjectId { get; set; }
        public virtual Project Project { get; set; }
-       
    }
 }

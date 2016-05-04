@@ -30,9 +30,13 @@ angular.module("timeControl").config(function ($routeProvider) {
 		controller: "myProjectsController"
     });
     
+    $routeProvider.when("/404", {
+        templateUrl: "js/views/404.html"
+    });
+    
     $routeProvider.otherwise(
     { 
-        redirectTo: '/timer' 
+        redirectTo: '/404' 
     });
 });
 

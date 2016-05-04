@@ -24,21 +24,18 @@ namespace TimeControl.Controllers
         }
         
         [HttpGet]
-        [Route("GetAllUser/{user}")]
-        public IEnumerable<Activity>GetAllUser(string user)
-        {            
-            return _activityService.GetAllUser(user);
+        [Route("GetAllUser/{userId}")]
+        public IEnumerable<Activity>GetAllUser(Guid userId)
+        {
+            return _activityService.GetAllUser(userId);
         }
         
         [HttpGet]
         [Route("GetAllProject/{projectId}")]
         public IEnumerable<Activity>GetAllProject(Guid projectId)
-        {            
-            Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>CONTROLLER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-            Console.WriteLine(projectId);
+        {
             return _activityService.GetAllProject(projectId);
         }
-        
         
         [HttpGet("{id}", Name = "GetActivity")]
         public IActionResult GetById(Guid Id)
@@ -63,27 +60,5 @@ namespace TimeControl.Controllers
         {
             _activityService.Remove(id);
         }
-        
-        [HttpPost]
-        [Route("SaveTime")]
-        public IActionResult SaveTime([FromBody] Time time)
-        {
-            return Json(_activityService.SaveTime(time));
-        }
-        
-        [HttpPut]
-        [Route("UpdateTime")]
-        public void UpdateTime([FromBody]Time time)
-        {
-            _activityService.UpdateTime(time);
-        }
-        
-        [HttpDelete]
-        [Route("DeleteTime/{id:Guid}")]
-        public void DeleteTime(Guid id)
-        {
-            _activityService.DeleteTime(id);
-        }
-        
     }
 }

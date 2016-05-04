@@ -23,9 +23,15 @@ namespace TimeControl.Service.Application
             return project;
         }
 
-        public void AddBelongTable(BelongToProject ids)
+        public bool AddBelongTable(BelongToProject ids)
         {
-             _projectRepository.AddBelongTable(ids);
+                     
+            return _projectRepository.AddBelongTable(ids);
+        }
+
+        public void DeleteBelongTable(BelongToProject ids)
+        {
+            _projectRepository.DeleteBelongTable(ids);
         }
 
         public Project Find(Guid Id)
@@ -33,21 +39,20 @@ namespace TimeControl.Service.Application
             return _projectRepository.Find(Id);
         }
 
-        public IEnumerable<Project> GetAll()
+        public IEnumerable<Project> GetAll(Guid userId)
         {
-            return _projectRepository.GetAll();
+            return _projectRepository.GetAll(userId);
         }
 
-        public IEnumerable<Project> GetAllNames()
+        public IEnumerable<Project> GetAllNamesProjects(Guid UserId)
         {
-            return _projectRepository.GetAllNames();
+            return _projectRepository.GetAllNamesProjects(UserId);
         }
 
-
-        // public IEnumerable<Project> GetAllUser(string administrator)
-        // {
-        //     return _projectRepository.GetAllUser(administrator);
-        // }
+        public IEnumerable<Project> GetProjectsParticipating(Guid userId)
+        {
+            return _projectRepository.GetProjectsParticipating(userId);
+        }
 
         public void Remove(Guid Id)
         {

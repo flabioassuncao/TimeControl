@@ -21,24 +21,12 @@
                                     <div class="table-search pull-right col-xs-12">
                                         <div class="form-group">
                                             <div class="form-group">
-                                                <label class="col-xs-12 control-label text-right">Search <a ng-click="searchName();testeProje()" class="colorlink fa fa-search"></a> <br></label>
+                                                <label class="col-xs-12 control-label text-right">Search <a ng-click="searchName();getNameProjects()" class="colorlink fa fa-search"></a> <br></label>
                                             </div>
                                             <div ng-show="search">
-                                                <!--<div class="form-group col-xs-3">
-                                                    <label class="item item-input">Search activity: </label> 
-                                                    <input placeholder="Search by activity"  class="form-control" id="" ng-model="criterioDeBusca"  type="text" id="" >
-                                                </div>-->
-                                                <!--<div class="form-group col-xs-3">
-                                                    <label class="item item-input">Initial Date: </label> 
-                                                    <input type="date" class="form-control" placeholder="Initial date"  name="initialDate" min-date="2011-01-01" ng-model="initialDate">
-                                                </div>-->
-                                                <!--<div class="form-group col-xs-3">
-                                                    <label class="item item-input">Final Date: </label>
-                                                    <input type="date" class="form-control" placeholder="final date" name="finalDate" min-date="2011-01-01" ng-model="finalDate">
-                                                </div>-->
                                                 <div class="form-group col-xs-5">
                                                     <label class="item item-input">Project: </label>
-                                                    <select class="form-control" ng-model="project.ProjectId" ng-options="item.ProjectId as item.ProjectName for item in project" data-ng-change="getOptions2(project.ProjectId)">
+                                                    <select class="form-control" ng-model="project.ProjectId" ng-options="item.ProjectId as item.ProjectName for item in project" data-ng-change="getBelongProject(project.ProjectId)">
                                                         <option value="">Select to project</option>
                                                     </select>
                                                 </div>
@@ -74,17 +62,13 @@
 						<table id="addManageTable" class="table table-striped table-bordered add-manage-table table demo" data-filter="#filter" data-filter-text-only="true" ng-show="activities.length > 0">
 							<thead>
 							     <tr>
-                                   <th></th>
 								   <th> Task </th>
 								   <th> Details </th>
 								   <th> Duration </th>
 								 </tr>
 							</thead>
-							<tbody ng-repeat="activity in act = (activities | filter:{Link:criterioDeBusca} | filter:{ProjectId:project.ProjectId} | filter:users.UserId )   ">
-							    <tr ng-repeat="time in times = (activity.Times | filter:{Status:true} | betweenDate:'StartDate':initialDate:finalDate)" >
-                                    <td id="colActivityActions">
-                                        <p> {{(activity.Responsible).UserName}} </p>
-									</td>
+							<tbody ng-repeat="activity in act = (activities | filter:{Link:criterioDeBusca}  | filter:{ResponsibleId:users.UserId} )   ">
+							    <tr ng-repeat="time in times = (activity.Times | filter:{Status:true} )" >
 								    <td id="colActivityLink" class="add-img-td">
                                         <div ng-bind-html="SkipValidation((activity.Link | formatLink))">  </div> 
 									</td>
@@ -101,13 +85,6 @@
 							    </tr>
 							</tbody>
 						</table>
-                        <div class="table-action">
-						  <div class="table-search pull-right col-xs-7">
-						      <div class="form-group">
-								<label class="col-xs-8 control-label text-right">Total time: {{ totalTimeActivities() }} <br></label>
-							  </div>
-						  </div>
-						</div>
 					</div>
 				</div>
 			</div>

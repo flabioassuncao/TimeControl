@@ -1,5 +1,4 @@
 angular.module("timeControl").provider("functionsForHours", function () {
-	
 	this.$get = function () {
 		return {
 			addHoras: function (hrA, hrB, resetHour) {
@@ -35,34 +34,27 @@ angular.module("timeControl").provider("functionsForHours", function () {
 			},
             
             transformingSeconds: function (seconds){
-                
                 function twoHouses(numeral){
                     if (numeral <= 9){
                         numeral = "0" + numeral;
                     }
                     return numeral;
                 }
-
                 var hour = twoHouses(Math.round(seconds/3600));
                 var minute = twoHouses(Math.floor((seconds%3600)/60));
                 var second = twoHouses((seconds%3600)%60);
-                        
                 var formatted = hour+":"+minute+":"+second;
-                        
                 return formatted;
             },
             
             formatTime: function(time){
-                
                 time = time.replace("H ", ":");
                 time = time.replace("M ", ":");
                 time = time.replace("S", "");
-                
                 return time;
             },
             
             turningForSeconds: function(startDate, endDate){
-                
                 var dt1 = moment(startDate, "YYYY/MM/DD hh:mm:ss");
                 var dt2 = moment(endDate, "YYYY/MM/DD hh:mm:ss");
                 return dt2.diff(dt1, 'seconds');
@@ -72,7 +64,7 @@ angular.module("timeControl").provider("functionsForHours", function () {
                 var h = x.hours().toString().length == 2? x.hours() : ("0" + x.hours());
                 var m = x.minutes().toString().length == 2? x.minutes() : ("0" + x.minutes());
                 var s = x.seconds().toString().length == 2? x.seconds() : ("0" + x.seconds());
-                return h + "H " + m + "M " + s + "S";
+                return h + ":" + m + ":" + s;
             }
 		};
 	};

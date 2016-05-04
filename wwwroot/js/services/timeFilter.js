@@ -5,8 +5,6 @@ angular.module("timeControl").filter('formatTimer', function() {
         var seconds = input % 60;
         var minutes = Math.floor(input / 60);
         var hours = Math.floor(minutes / 60);
-        return (z(hours) +'H '+z(minutes)+'M '+z(seconds)+'S');
+        return (z(hours) +':'+z(minutes)+':'+z(seconds));
     };
-    
-    
 });

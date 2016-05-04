@@ -8,15 +8,13 @@ namespace TimeControl.Interfaces.Repository
     public interface IProjectRepository
    {
       void Add(Project project);
-      IEnumerable<Project> GetAll();
-      
-      IEnumerable<Project> GetAllNames();
-      
-    //   IEnumerable<Project> GetAllUser(string administrator);
+      IEnumerable<Project> GetAll(Guid userId);
+      IEnumerable<Project> GetAllNamesProjects(Guid UserId);
+      IEnumerable<Project> GetProjectsParticipating(Guid userId);
       Project Find(Guid Id);
       void Remove(Guid Id);
       void Update([FromBody] Project project);
-      
-      void AddBelongTable(BelongToProject ids);
+      bool AddBelongTable(BelongToProject ids);
+      void DeleteBelongTable(BelongToProject ids);
    }
 }

@@ -1,10 +1,6 @@
 angular.module("timeControl").controller("activitiesController", function ($scope, $sce, $log, activityAPI, functionsForHours, $timeout, $location, $q, localStorageService) {
    $scope.activities = [];
-   $scope.authentication = activityAPI.authentication;   
-   $scope.dt = new Date();
-   $scope.filterteste;
-   $scope.datee = $scope.dt;
-   
+   $scope.authentication = activityAPI.authentication
    $scope.todos = [];
     
     $scope.addTodo = function(){
@@ -16,30 +12,30 @@ angular.module("timeControl").controller("activitiesController", function ($scop
     
     $scope.removeTodo = function(index) {
       $scope.todos.splice(index,1);
-      delete $scope.criterioDeBusca;
+      delete $scope.searchCriteria;
       delete $scope.initialDate
       if($scope.todos.length == 0)
-        $scope.search = false;
-    }
-   
-   $scope.testeProje = function () {
-        activityAPI.getNameProjects().success(function (data) {
-            $scope.project = data;
-        });
+            $scope.search = false;
     }
    
    var loadActivity = function () {
-        var user = activityAPI.authentication.userName;
-        if(user){
-            activityAPI.getActivityUser(user).success(function (data) {
+        var userId = activityAPI.authentication.idUser;
+        if(userId){
+            activityAPI.getActivityUser(userId).success(function (data) {
                 $scope.activities = data;
+                var timer = $timeout(function () {
+                    $timeout.cancel(timer);
+                         activityAPI.getProjectsParticipating().success(function (data) {
+                        $scope.project = data;
+                     });
+                }, 2000);
             }).error(function (data, status) {
             });
         }
-	};
+	}
     
     $scope.ShowActivity = function (Activity) {
-        $scope.criterioDeBusca = Activity.Link;
+        $scope.searchCriteria = Activity.Link;
     }
     
     $scope.deletarActivity = function (ActivityId) {
@@ -48,15 +44,6 @@ angular.module("timeControl").controller("activitiesController", function ($scop
 			loadActivity();
 		});
     }
-    
-    $scope.filterByUserNameCurrentContext = function (activity) { 
-        return activity.Responsible === activityAPI.authentication.userName;
-    };
-    
-    $scope.ordenarPor = function (campo) {
-		$scope.criterioDeOrdenacao = campo;
-		$scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
-	};
     
     $scope.totalTimeActivities = function(){
         var total = "00:00:00";
@@ -76,38 +63,7 @@ angular.module("timeControl").controller("activitiesController", function ($scop
     }
     
     $scope.ContinueActivity = function(activity){
-        activityAPI.getActivity().success(function (data) {
-			var objts = data, resul, timer, item, obj;
-            var authData = localStorageService.get('authorizationData');
-            for(item in objts){
-                for(obj in objts[item].Times){
-                    if(objts[item].Times[obj].Status == false && objts[item].Responsible == authData.userName){
-                        timer = objts[item].Times[obj];
-                        resul = objts[item];
-                    }
-                }
-            }
-            if(resul){
-                toastr["warning"]("There is already an activity running!")
-            }else{
-                var time = {};
-                time.StartDate = moment().format();
-                time.ActivityTime = "00:00:00";
-                time.ActivityId = activity.ActivityId;
-                activityAPI.saveTime(time);
-                toastr.options = {"progressBar": true, "timeOut": "2000",}
-                toastr["info"]("Wait!!")
-                startTimer();
-            }
-		}).error(function (data, status) {
-		});
-    }
-    
-    var startTimer = function () {
-        var timer = $timeout(function () {
-            $timeout.cancel(timer);
-            $location.path('/timer');
-        }, 2000);
+        activityAPI.continueActivity(activity);
     }
     
     $scope.DeleteTime = function (timeId){
@@ -121,13 +77,13 @@ angular.module("timeControl").controller("activitiesController", function ($scop
         return $sce.trustAsHtml(value);
     };
     
-    activityAPI.checkAuthentication();
-    loadActivity(); 
-    
     $scope.searchName = function () {
         if($scope.search)
             $scope.search = false;
         else   
             $scope.search = true;
     }
+    
+    activityAPI.checkAuthentication();
+    loadActivity(); 
 });

@@ -17,16 +17,22 @@ namespace TimeControl.Controllers
             _userService = userService;
         }
         
+        [HttpPost]
+        public IActionResult Create([FromBody] User user)
+        {   
+            return Json(_userService.Add(user));
+        }
+        
         [HttpGet]
         public IEnumerable<User>GetAll()
         {            
             return _userService.GetAll();
         }
         
-        [HttpGet("{id}", Name = "GetUser")]
-        public IActionResult GetById(Guid Id)
+        [HttpGet("{userName}", Name = "GetUser")]
+        public IActionResult GetById(string userName)
         {
-            return new ObjectResult(_userService.Find(Id));
+            return new ObjectResult(_userService.Find(userName));
         }
         
         [HttpGet]
@@ -40,15 +46,7 @@ namespace TimeControl.Controllers
         [Route("GetAllBelongProject/{projectId}")]
         public IEnumerable<User>GetAllBelongProject(Guid projectId)
         {
-            Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CONTROLLER<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
             return _userService.GetAllBelongProject(projectId);
-        }
-        
-        [HttpGet]
-        [Route("GetProjectsParticipating/{userId}")]
-        public IEnumerable<Project>GetProjectsParticipating(Guid userId)
-        {
-            return _userService.GetProjectsParticipating(userId);
         }
     }
 }

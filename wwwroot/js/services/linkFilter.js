@@ -4,14 +4,13 @@ angular.module("timeControl").filter('formatLink', function() {
         if(targ){
             this.ArrayTexto = targ.split(" ");
             this.tmpChar = "";
-            for (var k=0; k<this.ArrayTexto.length; k++) {
+            for(var k=0; k<this.ArrayTexto.length; k++) {
                 this.idxUrl1 = this.ArrayTexto[k].slice(0,7);
                 this.idxUrl2 = this.ArrayTexto[k].slice(0,4);
                 this.idxUrl3 = this.ArrayTexto[k].slice(0,8);
                 if(this.idxUrl1 != "http://" && this.idxUrl2 != "www." && this.idxUrl3 != "https://"){
                     this.tmpChar += this.ArrayTexto[k] + " ";
-                }
-                else{
+                }else{
                     this.Link = "";
                     if (this.idxUrl2 == "www.") this.Link = "http://";
                     this.Link += this.ArrayTexto[k];
