@@ -1,7 +1,7 @@
 # TimeControl
-Sistema que tem por objetivo organizar o tempo utilizado em seus projetos.
+System in order to organize the time spent on day-to-day.
 
- - Desenvolvido em ASP.NET CORE 1.0 + AngularJs 
+ - Developed in ASP.NET CORE 1.0 + AngularJs 1.5
  
 ![alt tag](http://imageshack.com/a/img922/6321/e4FO2Y.png)
 
